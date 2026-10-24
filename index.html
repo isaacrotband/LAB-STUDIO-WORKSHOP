@@ -1,0 +1,1644 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Workshop Lab Studio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=Cinzel:wght@400..900&family=JetBrains+Mono:wght@400;600&family=Montserrat:wght@400;500;600;700&family=UnifrakturCook:wght@700&display=swap">
+<style>
+/* Layout: uma página contínua sobre um gradiente cinza fixo, como o pôster LAB SP.
+   Tipografia branca gigante e condensada, lentes P&B sobrepostas, detalhes em dourado. */
+:root{
+  --bg:#ffffff; --bg-2:#f7f6f3;
+  --ink:#121212; --ink-2:#55534e; --ink-3:#8a877f;
+  --white:#ffffff; --display:#121212;
+  --gold:#c98f2a; --gold-2:#efc46a; --gold-3:#94621a;
+  --ouro:linear-gradient(160deg,#fbe3a1 0%,#e2ad4c 28%,#a86e1c 52%,#e9b95a 74%,#7a4d12 100%);
+  --panel:#111111; --panel-2:#1c1c1b; --panel-ink:#f3f3f1; --panel-ink-2:#a3a39e;
+  --glass:#faf9f6; --glass-2:#f2f0ea;
+  --line:rgba(18,18,18,.12); --line-2:rgba(18,18,18,.28);
+  --shadow:rgba(0,0,0,.12);
+  --nav-bg:rgba(255,255,255,.82);
+  --f-display:"Cinzel","Trajan Pro",Georgia,serif;
+  --f-body:"Montserrat","Helvetica Neue",Arial,sans-serif;
+  --f-serif:"Cinzel","Trajan Pro",Georgia,serif;
+  --f-black:"UnifrakturCook","Old English Text MT",Georgia,serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --gutter:max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r:max(16px, env(safe-area-inset-right, 0px));
+  --wrap:1240px;
+  --navh:64px;
+  color-scheme:light;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--navh) + 12px)}
+body{
+  margin:0;font-family:var(--f-body);font-size:16px;line-height:1.65;color:var(--ink);
+  background:var(--bg);
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--nav-bg)}
+/* grão de filme */
+body::after{
+  content:"";position:fixed;inset:-50%;pointer-events:none;z-index:70;opacity:.035;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grao 1.2s steps(6) infinite;
+}
+@keyframes grao{0%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}40%{transform:translate(2%,-3%)}60%{transform:translate(-2%,-1%)}80%{transform:translate(3%,3%)}100%{transform:translate(0,0)}}
+img{max-width:100%;display:block}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:4px}
+::selection{background:var(--gold-2);color:#111}
+
+.wrap{max-width:var(--wrap);margin:0 auto;padding-left:var(--gutter);padding-right:var(--gutter-r)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- elementos de identidade ---------- */
+.diamond{display:inline-block;width:1em;height:1em;vertical-align:-.12em;color:var(--gold)}
+.rule{display:flex;align-items:center;gap:14px;color:var(--ink)}
+.rule::before,.rule::after{content:"";flex:1;height:1px;background:currentColor;opacity:.55}
+.rule .tip{width:0;height:0;border-style:solid}
+.rule .tip.l{border-width:5px 9px 5px 0;border-color:transparent currentColor transparent transparent;margin-right:-14px;order:-1}
+.rule .tip.r{border-width:5px 0 5px 9px;border-color:transparent transparent transparent currentColor;margin-left:-14px;order:9}
+.rule .diamond{font-size:30px}
+.eyebrow{font-family:var(--f-body);font-weight:700;font-size:.72rem;letter-spacing:.32em;text-transform:uppercase;color:var(--ink-2)}
+.mono{font-family:var(--f-mono);font-size:.78rem;letter-spacing:.04em}
+
+.logo{display:inline-flex;align-items:flex-end;line-height:1;text-decoration:none;color:var(--ink);gap:0}
+.logo .la{font-family:var(--f-serif);font-weight:500;font-size:1.55em;letter-spacing:.02em}
+.logo .b{font-family:var(--f-black);font-size:2.05em;margin-left:.02em;color:var(--ink);-webkit-text-stroke:.6px var(--ink);line-height:.82}
+.logo .sp{font-family:var(--f-black);font-size:1.3em;align-self:flex-start;margin-left:-.18em;margin-top:-.08em;
+  background:linear-gradient(180deg,var(--gold-2),var(--gold) 55%,var(--gold-3));-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* ---------- navegação ---------- */
+.nav{
+  position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:50;
+  background:var(--nav-bg);backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2);
+  border-bottom:1px solid var(--line);
+}
+.nav-in{max-width:var(--wrap);margin:0 auto;padding-left:var(--gutter);padding-right:var(--gutter-r);
+  display:flex;align-items:center;gap:18px;height:var(--navh)}
+.nav .logo{font-size:17px;flex:none}
+.nav ul{list-style:none;margin:0 0 0 auto;padding:0;display:flex;gap:4px}
+.nav a.lk{display:flex;align-items:center;gap:8px;text-decoration:none;font-weight:600;font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;
+  padding:9px 14px;border-radius:999px;color:var(--ink-2);transition:color .2s, background .2s;white-space:nowrap}
+.nav a.lk .diamond{width:0;opacity:0;transition:width .25s, opacity .25s;font-size:12px}
+.nav a.lk:hover{color:var(--ink);background:var(--glass)}
+.nav a.lk.on{color:var(--ink);background:var(--glass-2);box-shadow:inset 0 0 0 1px var(--line)}
+.nav a.lk.on .diamond{width:12px;opacity:1}
+.tc{font-family:var(--f-mono);font-size:.7rem;color:var(--ink-2);display:flex;align-items:center;gap:8px;flex:none;letter-spacing:.06em}
+.tc .rec{width:8px;height:8px;border-radius:50%;background:#d12c2c;animation:pisca 1.4s infinite}
+@keyframes pisca{50%{opacity:.2}}
+.prog{position:absolute;left:0;bottom:-1px;height:2px;width:100%;transform-origin:0 50%;transform:scaleX(0);
+  background:linear-gradient(90deg,var(--gold-3),var(--gold-2))}
+@media (max-width:900px){
+  :root{--navh:104px}
+  .nav-in{flex-wrap:wrap;height:auto;padding-top:10px;padding-bottom:8px;gap:6px 12px}
+  .nav ul{margin:0;width:100%;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+  .nav ul::-webkit-scrollbar{display:none}
+  .tc{margin-left:auto}
+}
+
+/* ---------- abertura ---------- */
+.hero{position:relative;padding-top:calc(var(--navh) + 40px);padding-bottom:40px;overflow:clip;text-align:center}
+.bl{font-family:var(--f-black);font-weight:700;background:var(--ouro);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-stroke:.5px rgba(122,77,18,.35)}
+.bv{margin:0;font-family:var(--f-display);font-size:clamp(1.3rem,3vw,2.4rem);letter-spacing:.06em;text-transform:uppercase;animation:sobe 1s cubic-bezier(.2,.7,.1,1) backwards}
+.bv .bl{font-size:1.3em;margin-right:-.06em}
+.h1{position:relative;z-index:1;margin:.02em 0 0;font-family:var(--f-display);font-weight:400;color:var(--display);font-size:min(12.6vw,9.8rem);line-height:1;letter-spacing:.005em;text-transform:uppercase;white-space:nowrap;animation:sobe 1s .1s cubic-bezier(.2,.7,.1,1) backwards}
+.h1 .bl{font-size:1.32em;line-height:0;vertical-align:-.08em}
+.h1 .w{margin-right:-.12em}
+.h1 .sx{position:relative;display:inline-block;color:transparent}
+.h1 .sx .bl{position:absolute;left:50%;top:50%;transform:translate(-52%,-56%);font-size:1.5em;line-height:1}
+.h1 .sx .sp{position:absolute;left:62%;top:-.32em;font-family:var(--f-black);font-size:.42em;line-height:1;background:var(--ouro);-webkit-background-clip:text;background-clip:text;color:transparent}
+.maos{position:relative;z-index:2;width:min(100%,980px);margin:-6.2% auto 0;pointer-events:none}
+.maos img{width:100%;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 11%,#000 93%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 11%,#000 93%,transparent 100%);filter:drop-shadow(0 34px 26px rgba(0,0,0,.18));animation:flutua 9s ease-in-out infinite}
+.maos::after{content:"";position:absolute;left:18%;right:18%;bottom:-4%;height:16%;background:radial-gradient(closest-side,rgba(0,0,0,.14),transparent);z-index:-1}
+@keyframes flutua{50%{transform:translateY(-10px)}}
+@keyframes sobe{from{opacity:0;transform:translateY(.25em)}}
+.labt{position:relative;z-index:3;display:flex;align-items:flex-end;justify-content:center;gap:0;margin:.1em 0 0;flex-wrap:wrap;font-family:var(--f-display);font-size:min(14vw,7.6rem);line-height:1;color:var(--ink);animation:sobe 1s .25s cubic-bezier(.2,.7,.1,1) backwards}
+.labt .la{font-family:var(--f-serif);letter-spacing:.02em}
+.labt .b{font-family:var(--f-black);font-size:1.12em;line-height:.86;margin-left:-.26em;-webkit-text-stroke:1px var(--ink)}
+.labt .dot{margin-left:.02em}
+.labt .st{margin-left:.4em;font-size:.5em;letter-spacing:.1em;padding-bottom:.14em;text-transform:uppercase}
+.labt .st .bl{font-size:1.35em;line-height:0}
+.by{display:inline-flex;align-items:baseline;gap:10px;color:var(--ink)}
+.by i{font-family:var(--f-black);font-style:normal;font-size:1.5rem;background:var(--ouro);-webkit-background-clip:text;background-clip:text;color:transparent}
+.by b{font-weight:700;font-size:.8rem;letter-spacing:.42em;text-transform:uppercase}
+.hero .by{margin-top:14px}
+.ex{display:block;margin-top:8px;font-family:var(--f-display);font-size:.95rem;letter-spacing:.12em}
+.ex em{font-style:normal;font-family:var(--f-black);background:var(--ouro);-webkit-background-clip:text;background-clip:text;color:transparent;font-size:1.15em}
+.ex small{display:block;margin:6px auto 0;max-width:46ch;font-family:var(--f-body);font-size:.78rem;letter-spacing:0;color:var(--ink-2)}
+.orn{position:absolute;z-index:3;color:var(--gold);pointer-events:none}
+.orn.dl1{left:var(--gutter);bottom:28%;width:46px;height:40px}
+.orn.ch1{right:var(--gutter-r);bottom:28%;width:58px;height:36px}
+.orn svg{width:100%;height:100%}
+.hero-foot{position:relative;z-index:4;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;margin-top:56px;border-block:1px solid var(--line-2);text-align:left}
+.hero-foot a{display:block;text-decoration:none;padding:16px 18px 18px;border-right:1px solid var(--line);transition:background .25s}
+.hero-foot a:last-child{border-right:0}
+.hero-foot a:hover{background:var(--glass-2)}
+.hero-foot .n{font-family:var(--f-mono);font-size:.7rem;color:var(--gold-3)}
+.hero-foot .t{display:block;font-family:var(--f-display);font-weight:600;font-size:1.12rem;line-height:1.15;text-transform:uppercase;margin-top:6px}
+.hero-foot .d{display:block;font-size:.78rem;color:var(--ink-2);margin-top:4px}
+.hero-tag{position:relative;z-index:4;margin-top:22px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.hero-tag span{font-weight:500;font-size:.72rem;letter-spacing:.5em;text-transform:uppercase;color:var(--ink-2)}
+.scroll-cue{display:inline-flex;align-items:center;gap:10px}
+.scroll-cue::after{content:"";width:1px;height:28px;background:var(--gold);animation:desce 1.8s infinite;transform-origin:top}
+@keyframes desce{0%{transform:scaleY(0)}50%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+@media (max-width:900px){
+  .hero-foot{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hero-foot a:nth-child(2){border-right:0}
+  .hero-foot a:nth-child(n+3){border-top:1px solid var(--line)}
+  .orn.dl1,.orn.ch1{bottom:auto;top:calc(var(--navh) + 14px);width:34px;height:28px}
+}
+
+/* ---------- faixa corrida ---------- */
+.ticker{background:var(--bg);color:var(--ink);overflow:hidden;border-block:1px solid var(--line-2)}
+.ticker.preto{background:var(--panel);color:var(--panel-ink);border-color:transparent}
+.ticker .tr{display:flex;width:max-content;animation:corre 38s linear infinite}
+.ticker.rev .tr{animation-direction:reverse}
+.ticker span{display:flex;align-items:center;gap:26px;padding:14px 13px;font-family:var(--f-display);font-weight:600;
+  font-size:1.2rem;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+.ticker.frases span{font-family:var(--f-body);font-weight:500;font-size:1rem;letter-spacing:.02em;text-transform:none}
+.ticker .diamond{font-size:15px}
+@keyframes corre{to{transform:translateX(-50%)}}
+
+/* ---------- ornamentos ---------- */
+.div-orn{display:flex;align-items:center;gap:18px;color:var(--gold);margin:0 auto;max-width:var(--wrap);padding-left:var(--gutter);padding-right:var(--gutter-r)}
+.div-orn::before,.div-orn::after{content:"";flex:1;height:1px;background:var(--line-2)}
+.div-orn svg{width:30px;height:26px;flex:none}
+.div-orn .ch{width:40px;height:24px}
+.cab-orn{position:absolute;z-index:2;right:0;top:-46px;display:flex;align-items:center;gap:18px;color:var(--gold)}
+.cab-orn svg{width:36px;height:30px}.cab-orn .ch{width:46px;height:28px}
+.sec{position:relative}
+.sec::before{content:"";position:absolute;left:-5px;top:-5px;width:9px;height:9px;transform:rotate(45deg);background:var(--ouro)}
+.mono-lab{font-family:var(--f-serif);font-size:1rem;letter-spacing:.04em;color:var(--ink)}
+.mono-lab b{font-family:var(--f-black);font-weight:700}
+.mono-lab i{font-style:normal;font-family:var(--f-black);font-size:.62em;vertical-align:-.3em;background:var(--ouro);-webkit-background-clip:text;background-clip:text;color:transparent;margin-left:-.1em}
+
+/* ---------- blocos ---------- */
+.bloco{position:relative;padding-block:120px 40px;overflow-x:clip}
+.cab{position:relative;margin-bottom:64px}
+.cab-top{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+.cab-top .eyebrow{color:var(--ink)}
+.cab-top .ln{flex:1;height:1px;background:var(--line-2)}
+.cab-top .cnt{font-family:var(--f-mono);font-size:.72rem;color:var(--ink-2)}
+.num-fundo{position:absolute;right:0;top:-.18em;font-family:var(--f-black);font-weight:700;
+  font-size:min(40vw,26rem);line-height:1;color:transparent;-webkit-text-stroke:1.2px rgba(201,143,42,.45);pointer-events:none;z-index:0;user-select:none}
+.h2{position:relative;z-index:1;margin:0;font-family:var(--f-display);font-weight:400;color:var(--display);
+  font-size:clamp(2.4rem,7.6vw,6.4rem);line-height:1;letter-spacing:.01em;text-transform:uppercase;text-wrap:balance}
+.h2 .bl{font-size:1.3em;line-height:0;vertical-align:-.06em;margin-right:-.04em}
+.h2 .out,.ouro{background:var(--ouro);-webkit-background-clip:text;background-clip:text;color:transparent}
+.cab-sub{position:relative;z-index:1;display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;margin-top:22px}
+.cab-sub p{margin:0;font-size:1.08rem;font-weight:500;color:var(--ink)}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;border:1px solid var(--line-2);font-weight:600;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;color:var(--ink);background:var(--glass)}
+a.pill:hover{background:var(--glass-2)}
+
+.h3{font-family:var(--f-display);font-weight:600;font-size:clamp(1.45rem,2.5vw,2.15rem);line-height:1.08;text-transform:uppercase;margin:0 0 18px;text-wrap:balance}
+.h4{font-family:var(--f-display);font-weight:600;font-size:1.22rem;line-height:1.1;text-transform:uppercase;margin:0 0 10px;letter-spacing:.01em}
+.txt p{margin:0 0 1em;max-width:64ch}
+.txt p:last-child{margin-bottom:0}
+.lead{font-size:1.18rem;line-height:1.6;max-width:58ch;font-weight:500}
+.muted{color:var(--ink-2)}
+
+.sec{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,7fr);gap:24px 56px;padding-block:56px;border-top:1px solid var(--line)}
+.sec>.l{position:relative}
+.sec .idx{font-family:var(--f-mono);font-size:.74rem;color:var(--gold-3);display:block;margin-bottom:10px;letter-spacing:.08em}
+.sec .stick{position:sticky;top:calc(var(--navh) + 24px)}
+@media (max-width:900px){.sec{grid-template-columns:minmax(0,1fr);padding-block:44px}.sec .stick{position:static}}
+
+/* citação/destaque */
+.call{position:relative;margin:28px 0 0;padding:22px 24px 22px 58px;background:var(--glass);border:1px solid var(--line);border-radius:4px;font-weight:600;font-size:1.06rem;line-height:1.5;max-width:60ch}
+.call::before{content:"";position:absolute;left:22px;top:26px;width:16px;height:16px;transform:rotate(45deg);background:linear-gradient(135deg,var(--gold-2),var(--gold-3))}
+.call small{display:block;margin-top:6px;font-weight:500;font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
+.quote-xl{position:relative;padding-block:90px;text-align:left}
+.quote-xl blockquote{margin:0;font-family:var(--f-display);font-weight:400;color:var(--display);
+  font-size:clamp(1.9rem,5.2vw,4.4rem);line-height:1.05;text-transform:uppercase;letter-spacing:.01em;text-wrap:balance;max-width:14ch}
+.quote-xl blockquote em{font-style:normal;background:var(--ouro);-webkit-background-clip:text;background-clip:text;color:transparent}
+.quote-xl .mk{font-family:var(--f-black);font-size:5rem;line-height:.6;background:var(--ouro);-webkit-background-clip:text;background-clip:text;color:transparent;display:block;margin-bottom:10px}
+.quote-xl.centro{text-align:center}.quote-xl.centro blockquote{margin:0 auto;max-width:18ch}
+.quote-xl .qo{position:absolute;top:50%;color:var(--gold)}.quote-xl .qo svg{width:42px;height:36px;display:block}.quote-xl .qo.l{left:0}.quote-xl .qo.r{right:0}.quote-xl .qo.r svg{width:54px;height:34px}
+@media (max-width:700px){.quote-xl .qo{top:18px}}
+.quote-xl cite{display:block;margin-top:22px;font-style:normal;font-weight:700;font-size:.74rem;letter-spacing:.32em;text-transform:uppercase;color:var(--ink-2)}
+
+/* painel escuro */
+.dark{background:var(--panel);color:var(--panel-ink);border-radius:6px;position:relative;overflow:hidden}
+.dark .muted{color:var(--panel-ink-2)}
+
+/* moldura de visor */
+.vf{position:relative}
+.vf::before,.vf::after{content:"";position:absolute;width:22px;height:22px;z-index:2;pointer-events:none;border:2px solid var(--white);opacity:.9}
+.vf::before{left:10px;top:10px;border-right:0;border-bottom:0}
+.vf::after{right:10px;bottom:10px;border-left:0;border-top:0}
+
+.bw img{filter:grayscale(1) contrast(1.06);transition:filter .7s ease, transform .9s cubic-bezier(.2,.7,.1,1)}
+.bw:hover img,.bw.cor img{filter:none}
+
+/* lista com losango */
+.dl{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.dl li{position:relative;padding-left:26px;max-width:62ch}
+.dl li::before{content:"";position:absolute;left:3px;top:.62em;width:8px;height:8px;transform:rotate(45deg);background:var(--gold)}
+.dl b{font-weight:700}
+
+/* ---------- bloco 1 ---------- */
+.b1-cab{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.62fr);align-items:end;gap:0}
+.b1-cab .pessoa{position:relative;z-index:2;justify-self:end;width:min(100%,330px);margin-bottom:-70px;transform:rotate(-14deg);filter:drop-shadow(0 30px 30px rgba(0,0,0,.18))}
+@media (max-width:900px){.b1-cab{grid-template-columns:minmax(0,1fr)}.b1-cab .pessoa{margin:-10px 0 -50px auto;width:52%}}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-block:1px solid var(--line-2);position:relative;z-index:3;background:var(--glass);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.stats div{padding:22px 20px;border-right:1px solid var(--line)}
+.stats div:last-child{border-right:0}
+.stats b{display:block;font-family:var(--f-display);font-weight:400;font-size:clamp(2.2rem,4.6vw,3.6rem);line-height:1;color:var(--ink)}
+.stats b sup{font-size:.4em;vertical-align:.9em;color:var(--gold-3)}
+.stats span{display:block;font-size:.84rem;color:var(--ink-2);margin-top:8px;line-height:1.4}
+@media (max-width:700px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.stats div:nth-child(2){border-right:0}.stats div:nth-child(n+3){border-top:1px solid var(--line)}}
+.cap{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;margin-top:64px;border-top:1px solid var(--line-2)}
+.cap article{padding:40px 40px 44px 0;border-bottom:1px solid var(--line)}
+.cap article:nth-child(odd){border-right:1px solid var(--line)}
+.cap article:nth-child(even){padding-left:40px;padding-right:0}
+.cap .cn{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.cap .cn b{font-family:var(--f-black);font-weight:700;font-size:3.2rem;line-height:.8;background:var(--ouro);-webkit-background-clip:text;background-clip:text;color:transparent}
+.cap .cn span{font-family:var(--f-mono);font-size:.7rem;color:var(--ink-2)}
+.cap .ft{margin-top:22px;border-radius:4px;overflow:hidden;aspect-ratio:4/3}
+.cap .ft img{width:100%;height:100%;object-fit:cover;object-position:50% 40%}
+.cap .ft figcaption{position:absolute;left:12px;bottom:10px;z-index:2;color:#fff;font-family:var(--f-mono);font-size:.68rem;letter-spacing:.06em;text-shadow:0 1px 6px rgba(0,0,0,.6)}
+@media (max-width:800px){.cap{grid-template-columns:minmax(0,1fr)}.cap article,.cap article:nth-child(even){padding:34px 0;border-right:0}}
+
+.fe{padding:90px clamp(20px,6vw,90px);margin-top:80px;text-align:center}
+.fe .hud{position:absolute;inset:18px;pointer-events:none;font-family:var(--f-mono);font-size:.66rem;color:var(--panel-ink-2);letter-spacing:.08em}
+.fe .hud span{position:absolute}
+.fe .hud .a{left:0;top:0}.fe .hud .b{right:0;top:0}.fe .hud .c{left:0;bottom:0}.fe .hud .d{right:0;bottom:0}
+.fe .af{position:absolute;left:50%;top:50%;width:min(70%,560px);height:62%;transform:translate(-50%,-50%);border:1px solid rgba(255,255,255,.12);pointer-events:none}
+.fe .af::before,.fe .af::after{content:"";position:absolute;width:26px;height:26px;border:2px solid var(--gold)}
+.fe .af::before{left:-1px;top:-1px;border-right:0;border-bottom:0}.fe .af::after{right:-1px;bottom:-1px;border-left:0;border-top:0}
+.fe p.pre{position:relative;margin:0 auto 26px;max-width:46ch;color:var(--panel-ink-2);font-size:1.02rem}
+.fe blockquote{position:relative;margin:0 auto;font-family:var(--f-display);font-weight:400;font-size:clamp(1.8rem,4.6vw,3.8rem);line-height:1.05;text-transform:uppercase;max-width:16ch;text-wrap:balance;
+  filter:blur(var(--blur,0px));transition:filter .15s linear}
+.fe cite{position:relative;display:block;margin-top:22px;font-style:normal;font-weight:700;letter-spacing:.32em;font-size:.74rem;color:var(--gold-2);text-transform:uppercase}
+
+/* ---------- bloco 2 ---------- */
+.pilares{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.pilar{position:relative;padding:34px 28px 30px;border-radius:6px;background:var(--glass);border:1px solid var(--line);display:flex;flex-direction:column;gap:14px;overflow:hidden;min-width:0}
+.pilar.dark{border-color:transparent;background:var(--panel)}
+.pilar .rn{font-family:var(--f-serif);font-weight:500;font-size:5.6rem;line-height:.8;background:var(--ouro);-webkit-background-clip:text;background-clip:text;color:transparent}
+.pilar h3{margin:0;font-family:var(--f-display);font-weight:400;font-size:clamp(1.35rem,2.1vw,1.85rem);line-height:1.05;text-transform:uppercase;overflow-wrap:anywhere}
+.pilar p{margin:0}
+.pilar .hl{margin-top:auto;padding-top:18px;border-top:1px solid var(--line);font-weight:700;font-size:1.02rem}
+.pilar.dark .hl{border-color:rgba(255,255,255,.14)}
+.pilar .hl small{display:block;font-weight:500;font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;opacity:.7;margin-top:6px}
+@media (max-width:900px){.pilares{grid-template-columns:minmax(0,1fr)}}
+.quinze{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:28px 56px;margin-top:80px;padding:44px clamp(20px,5vw,60px)}
+.ring{position:relative;width:min(56vw,250px);aspect-ratio:1}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring .bgc{fill:none;stroke:rgba(255,255,255,.12);stroke-width:5}
+.ring .fg{fill:none;stroke:var(--gold);stroke-width:5;stroke-linecap:round;stroke-dasharray:578;stroke-dashoffset:578;animation:enche 15s linear infinite}
+@keyframes enche{to{stroke-dashoffset:0}}
+.ring .lbl{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.ring .lbl b{font-family:var(--f-display);font-weight:400;font-size:4.2rem;line-height:.9}
+.ring .lbl span{font-family:var(--f-mono);font-size:.7rem;color:var(--panel-ink-2);display:flex;align-items:center;gap:6px;justify-content:center;margin-top:8px}
+.ring .lbl span i{width:7px;height:7px;border-radius:50%;background:#e03a3a;animation:pisca 1.4s infinite}
+.quinze .q{font-family:var(--f-display);font-weight:400;font-size:clamp(1.6rem,3.2vw,2.7rem);line-height:1.08;text-transform:uppercase;margin:0 0 18px;text-wrap:balance}
+.quinze .chips{display:flex;flex-wrap:wrap;gap:8px}
+.quinze .chips span{border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:6px 12px;font-size:.8rem;color:var(--panel-ink-2)}
+@media (max-width:760px){.quinze{grid-template-columns:minmax(0,1fr)}.ring{margin:0 auto}}
+
+/* ---------- bloco 3 ---------- */
+.etapas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin-top:40px;border:1px solid var(--line-2);border-radius:6px;overflow:hidden;background:var(--glass)}
+.etapas a{position:relative;display:block;text-decoration:none;padding:24px 24px 26px;border-right:1px solid var(--line);transition:background .25s}
+.etapas a:last-child{border-right:0}
+.etapas a:hover{background:var(--glass-2)}
+.etapas b{display:block;font-family:var(--f-display);font-weight:400;font-size:clamp(1.9rem,3.8vw,3rem);line-height:1;text-transform:uppercase}
+.etapas span{display:block;font-size:.84rem;color:var(--ink-2);margin-top:8px}
+.etapas .mono{color:var(--gold-3)}
+.etapas a::after{content:"→";position:absolute;right:22px;top:22px;font-size:1.2rem;color:var(--ink-2);transition:transform .25s}
+.etapas a:hover::after{transform:translateX(4px)}
+@media (max-width:700px){.etapas{grid-template-columns:minmax(0,1fr)}.etapas a{border-right:0;border-bottom:1px solid var(--line)}.etapas a:last-child{border-bottom:0}}
+
+.fase{position:relative;margin-top:110px;padding-bottom:10px}
+.fase-tit{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:14px}
+.fase-tit h3{margin:0;font-family:var(--f-display);font-weight:400;font-size:clamp(3rem,12vw,9.5rem);line-height:.95;color:var(--display);text-transform:uppercase;letter-spacing:.01em}
+.fase-tit h3 .bl{font-size:1.25em;line-height:0;vertical-align:-.06em;margin-right:-.05em}
+.fase-tit p{margin:0 0 .6em;max-width:34ch;font-weight:600}
+.fase-tit .mono{display:block;color:var(--gold-3);margin-bottom:6px}
+
+.perg{list-style:none;margin:22px 0 0;padding:0;display:grid;gap:0;border-top:1px solid var(--line)}
+.perg li{display:grid;grid-template-columns:44px minmax(0,1fr);align-items:baseline;padding:14px 0;border-bottom:1px solid var(--line);font-weight:600}
+.perg li span{font-family:var(--f-mono);font-size:.72rem;color:var(--gold-3);font-weight:400}
+
+.refs{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;margin-top:22px}
+.ref{display:flex;flex-direction:column;gap:6px;padding:18px 18px 16px;border:1px solid var(--line);border-radius:6px;background:var(--glass);text-decoration:none;transition:transform .25s, background .25s;min-width:0}
+a.ref:hover{transform:translateY(-3px);background:var(--glass-2)}
+.ref b{font-family:var(--f-display);font-weight:600;font-size:1.2rem;text-transform:uppercase}
+.ref span{font-size:.84rem;color:var(--ink-2);line-height:1.45}
+.ref .mono{color:var(--gold-3);font-size:.7rem}
+
+.lk-ouro{color:var(--gold-3);font-weight:700;text-decoration:underline;text-decoration-color:var(--gold);text-underline-offset:3px}
+.lk-ouro:hover{color:var(--ink)}
+.ref.mila{margin:6px 0 22px;max-width:420px;border-color:var(--gold)}
+.ref.mila b{color:var(--ink)}
+.org{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:16px;margin-top:26px}
+.org .caos{position:relative;height:170px;border:1px dashed var(--line-2);border-radius:6px}
+.org .caos span{position:absolute;padding:5px 10px;border-radius:999px;background:var(--glass-2);border:1px solid var(--line);font-size:.74rem;font-weight:600;white-space:nowrap}
+.org .seta{font-size:1.6rem;color:var(--gold-3)}
+.org .plano{display:grid;gap:6px;padding:14px;border-radius:6px;background:var(--panel);color:var(--panel-ink)}
+.org .plano div{display:flex;justify-content:space-between;gap:10px;font-size:.78rem;padding:7px 10px;border-radius:4px;background:var(--panel-2)}
+.org .plano div i{font-style:normal;color:var(--gold-2);font-family:var(--f-mono);font-size:.68rem}
+@media (max-width:640px){.org{grid-template-columns:minmax(0,1fr)}.org .seta{transform:rotate(90deg);justify-self:center}}
+
+.arco{margin-top:24px;padding:22px 18px 10px;border-radius:6px;background:var(--glass);border:1px solid var(--line);overflow-x:auto}
+.arco svg{display:block;width:100%;min-width:520px;height:auto}
+.arco .cv{fill:none;stroke:var(--ink);stroke-width:2.5}
+.arco .ar{fill:url(#arcoG);stroke:none}
+.arco .pt{fill:var(--gold);stroke:var(--white);stroke-width:3}
+.arco .dr{stroke:var(--line-2);stroke-dasharray:3 4}
+.arco text{fill:var(--ink);font-family:var(--f-display);font-weight:600;font-size:15px;text-transform:uppercase;letter-spacing:.02em}
+.arco text.s{fill:var(--ink-2);font-family:var(--f-body);font-weight:500;font-size:11.5px;letter-spacing:0;text-transform:none}
+
+/* durante: câmera */
+.diag{margin-top:22px;padding:20px;border-radius:6px;overflow-x:auto}
+.diag svg{display:block;width:100%;min-width:520px;height:auto}
+.diag text{font-family:var(--f-body);font-size:12px;fill:var(--panel-ink-2)}
+.diag text.t{font-family:var(--f-display);font-weight:600;font-size:15px;fill:var(--panel-ink);text-transform:uppercase}
+.sens{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:22px;margin-top:22px;align-items:start}
+.sens svg{width:100%;height:auto;display:block}
+.sens svg rect{fill:none;stroke-width:1.6}
+.sens svg text{font-family:var(--f-display);font-weight:600;font-size:11px;text-transform:uppercase}
+.sens .ff{stroke:var(--ink)}.sens .ap{stroke:var(--gold-3)}.sens .m4{stroke:var(--ink-2)}.sens .ce{stroke:var(--ink-3);fill:var(--glass-2)!important}
+.sens .tff{fill:var(--ink)}.sens .tap{fill:var(--gold-3)}.sens .tm4{fill:var(--ink-2)}.sens .tce{fill:var(--ink-3)}
+.sens .box{padding:16px;border-radius:6px;background:var(--glass);border:1px solid var(--line)}
+.sens .cap2{font-family:var(--f-mono);font-size:.68rem;color:var(--ink-2);margin-top:8px}
+@media (max-width:760px){.sens{grid-template-columns:minmax(0,1fr)}}
+
+.vs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:22px}
+.vs>div{padding:22px;border-radius:6px;min-width:0}
+.vs .sony{background:var(--panel);color:var(--panel-ink)}
+.vs .canon{background:var(--glass);border:1px solid var(--line)}
+.vs b.mk{display:block;font-family:var(--f-display);font-weight:400;font-size:2rem;line-height:1;text-transform:uppercase;margin-bottom:10px}
+.vs .tag{display:inline-block;font-family:var(--f-mono);font-size:.66rem;padding:3px 8px;border-radius:3px;background:var(--gold);color:#111;margin-bottom:10px}
+.vs p{margin:0;font-size:.94rem}
+@media (max-width:640px){.vs{grid-template-columns:minmax(0,1fr)}}
+
+/* abertura interativa */
+.iris{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:0;margin-top:24px;border-radius:6px;overflow:hidden}
+.iris .ctl{padding:24px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.iris .fval{font-family:var(--f-display);font-weight:400;font-size:3.8rem;line-height:.9;color:var(--panel-ink)}
+.iris .fval small{font-size:.4em;color:var(--gold-2);margin-right:2px}
+.iris svg.bl{width:132px;height:132px;flex:none}
+.iris .top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.iris input[type=range]{width:100%;accent-color:var(--gold)}
+.iris .esc{display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:.64rem;color:var(--panel-ink-2)}
+.iris .met{display:grid;gap:8px}
+.iris .met div{display:grid;grid-template-columns:96px minmax(0,1fr);align-items:center;gap:10px;font-size:.76rem;color:var(--panel-ink-2)}
+.iris .met i{display:block;height:6px;border-radius:3px;background:rgba(255,255,255,.12);overflow:hidden}
+.iris .met i::after{content:"";display:block;height:100%;width:var(--v,50%);background:linear-gradient(90deg,var(--gold-3),var(--gold-2));transition:width .3s}
+.iris .desc{font-size:.86rem;color:var(--panel-ink);min-height:3em;margin:0}
+.iris .pv{position:relative;min-height:300px;overflow:hidden;background:#000}
+.iris .pv img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.iris .pv .fundo{filter:blur(var(--bk,6px));transform:scale(1.06);transition:filter .3s}
+.iris .pv .sujeito{-webkit-mask-image:radial-gradient(ellipse 19% 40% at 52% 44%,#000 62%,transparent 100%);mask-image:radial-gradient(ellipse 19% 40% at 52% 44%,#000 62%,transparent 100%)}
+.iris .pv .hudp{position:absolute;left:12px;right:12px;bottom:10px;display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:.68rem;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.7);z-index:3}
+@media (max-width:800px){.iris{grid-template-columns:minmax(0,1fr)}.iris .pv{min-height:240px}}
+
+.focal{margin-top:24px;border-radius:6px;overflow:hidden;border:1px solid var(--line);background:var(--glass)}
+.focal .vw{position:relative;aspect-ratio:16/8;overflow:hidden;background:#000}
+.focal .vw img{width:100%;height:100%;object-fit:cover;transform-origin:50% 62%;transition:transform 1s cubic-bezier(.2,.7,.1,1)}
+.focal .vw .mm{position:absolute;right:14px;top:12px;font-family:var(--f-mono);font-size:.74rem;color:#fff;background:rgba(0,0,0,.45);padding:4px 8px;border-radius:3px;z-index:3}
+.focal .bt{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.focal button{all:unset;cursor:pointer;padding:16px 18px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:2px;transition:background .2s}
+.focal button:last-child{border-right:0}
+.focal button b{font-family:var(--f-display);font-weight:600;font-size:1.05rem;text-transform:uppercase}
+.focal button span{font-size:.78rem;color:var(--ink-2)}
+.focal button .mono{color:var(--gold-3)}
+.focal button[aria-pressed=true]{background:var(--panel);color:var(--panel-ink)}
+.focal button[aria-pressed=true] span{color:var(--panel-ink-2)}
+.focal button:focus-visible{outline:2px solid var(--gold);outline-offset:-4px}
+@media (max-width:560px){.focal button{padding:12px 10px}.focal button span:not(.mono){display:none}}
+
+.partes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:18px}
+.partes div{padding:16px;border-top:2px solid var(--ink);min-width:0}
+.partes b{display:block;font-family:var(--f-display);font-weight:600;text-transform:uppercase;font-size:1.05rem;margin-bottom:6px}
+.partes span{font-size:.86rem;color:var(--ink-2)}
+@media (max-width:700px){.partes{grid-template-columns:minmax(0,1fr)}}
+
+.ajustes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:22px}
+.aj{padding:20px;border-radius:6px;background:var(--glass);border:1px solid var(--line);min-width:0}
+.aj .k{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.aj .k b{font-family:var(--f-display);font-weight:600;text-transform:uppercase;font-size:1.25rem}
+.aj .k span{font-family:var(--f-mono);font-size:.7rem;padding:3px 8px;border-radius:3px;background:var(--panel);color:var(--gold-2)}
+.aj p{margin:0;font-size:.92rem}
+.aj .tag{display:inline-block;margin-top:10px;font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-3)}
+@media (max-width:640px){.ajustes{grid-template-columns:minmax(0,1fr)}}
+.ordem{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin-top:16px;border-radius:6px;overflow:hidden}
+.ordem div{padding:18px 20px;background:var(--panel);color:var(--panel-ink);border-right:1px solid rgba(255,255,255,.1);min-width:0}
+.ordem div:last-child{border-right:0}
+.ordem i{font-style:normal;font-family:var(--f-mono);font-size:.7rem;color:var(--gold-2)}
+.ordem b{display:block;font-family:var(--f-display);font-weight:600;text-transform:uppercase;font-size:1.1rem;margin:4px 0}
+.ordem span{font-size:.82rem;color:var(--panel-ink-2)}
+@media (max-width:640px){.ordem{grid-template-columns:minmax(0,1fr)}.ordem div{border-right:0;border-bottom:1px solid rgba(255,255,255,.1)}}
+
+/* tela da câmera */
+.lcd{margin-top:22px;padding:18px;border-radius:10px;background:#050505;color:#f2f2f2;border:8px solid #1d1d1c;box-shadow:inset 0 0 40px rgba(255,255,255,.04),0 30px 60px var(--shadow);font-family:var(--f-mono)}
+.lcd .bar{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:.72rem;color:#cfcfcf;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.12)}
+.lcd .bar .r{display:flex;align-items:center;gap:6px;color:#ff5a5a}
+.lcd .bar .r i{width:8px;height:8px;border-radius:50%;background:#ff3b3b;animation:pisca 1.2s infinite}
+.lcd .gr{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:rgba(255,255,255,.1);margin-top:12px;border-radius:4px;overflow:hidden}
+.lcd .gr div{background:#0b0b0b;padding:14px 12px;min-width:0}
+.lcd .gr small{display:block;font-size:.62rem;color:#8d8d8d;letter-spacing:.1em}
+.lcd .gr b{display:block;font-size:1.3rem;font-weight:600;color:#fff;margin-top:4px;white-space:nowrap}
+.lcd .gr b.g{color:var(--gold-2)}
+.lcd .fps{display:flex;gap:8px;margin-top:14px;align-items:center;flex-wrap:wrap;font-size:.72rem;color:#9a9a9a}
+.lcd .fps button{all:unset;cursor:pointer;padding:7px 12px;border-radius:4px;border:1px solid rgba(255,255,255,.2);color:#ddd;font-size:.75rem}
+.lcd .fps button[aria-pressed=true]{background:var(--gold);border-color:var(--gold);color:#111;font-weight:600}
+.lcd .fps button:focus-visible{outline:2px solid var(--gold-2);outline-offset:2px}
+@media (max-width:560px){.lcd .gr{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* terços */
+.tercos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:22px}
+.tercos figure{margin:0;min-width:0}
+.tercos .im{position:relative;border-radius:4px;overflow:hidden;aspect-ratio:16/9}
+.tercos .im img{width:100%;height:100%;object-fit:cover}
+.tercos .im .g3{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:0;transition:opacity .4s;
+  background:
+   linear-gradient(90deg,transparent calc(33.333% - .5px),rgba(255,255,255,.85) calc(33.333% - .5px),rgba(255,255,255,.85) calc(33.333% + .5px),transparent calc(33.333% + .5px),transparent calc(66.666% - .5px),rgba(255,255,255,.85) calc(66.666% - .5px),rgba(255,255,255,.85) calc(66.666% + .5px),transparent calc(66.666% + .5px)),
+   linear-gradient(180deg,transparent calc(33.333% - .5px),rgba(255,255,255,.85) calc(33.333% - .5px),rgba(255,255,255,.85) calc(33.333% + .5px),transparent calc(33.333% + .5px),transparent calc(66.666% - .5px),rgba(255,255,255,.85) calc(66.666% - .5px),rgba(255,255,255,.85) calc(66.666% + .5px),transparent calc(66.666% + .5px))}
+.grade-on .tercos .im .g3{opacity:1}
+.tercos figcaption{font-size:.84rem;margin-top:10px;color:var(--ink-2);line-height:1.45}
+.tercos figcaption b{color:var(--ink)}
+.tbtn{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;border:1px solid var(--line-2);font-weight:600;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;background:var(--glass);margin-top:18px}
+.tbtn:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.tbtn[aria-pressed=true]{background:var(--panel);color:var(--panel-ink)}
+@media (max-width:800px){.tercos{grid-template-columns:minmax(0,1fr)}}
+
+.planos{list-style:none;margin:22px 0 0;padding:0;border-top:1px solid var(--line)}
+.planos li{display:grid;grid-template-columns:minmax(0,190px) minmax(0,1fr) 90px;align-items:center;gap:16px;padding:12px 0;border-bottom:1px solid var(--line)}
+.planos b{font-family:var(--f-display);font-weight:600;text-transform:uppercase;font-size:1rem}
+.planos span{font-size:.88rem;color:var(--ink-2)}
+.planos .fr{position:relative;height:34px;border:1px solid var(--line-2);border-radius:2px;overflow:hidden;background:var(--glass)}
+.planos .fr::after{content:"";position:absolute;left:50%;bottom:-2px;transform:translateX(-50%);width:calc(var(--s)*1%);aspect-ratio:1/2.4;border-radius:50% 50% 8% 8%;background:var(--ink)}
+@media (max-width:640px){.planos li{grid-template-columns:minmax(0,1fr) 70px}.planos li span{grid-column:1/-1;grid-row:2}}
+
+.angulos{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-top:22px}
+.angulos div{padding:16px 16px 14px;border-radius:6px;background:var(--glass);border:1px solid var(--line);min-width:0}
+.angulos b{display:block;font-family:var(--f-display);font-weight:600;text-transform:uppercase;font-size:1rem;margin-bottom:4px}
+.angulos span{font-size:.86rem;color:var(--ink-2);line-height:1.45;display:block}
+.angulos i{font-style:normal;font-family:var(--f-mono);font-size:.66rem;color:var(--gold-3);display:block;margin-bottom:6px}
+
+/* 34 shots */
+.shots-wrap{margin-top:90px;padding:44px clamp(16px,3vw,36px) 36px}
+.shots-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:24px}
+.shots-head h3{margin:0;font-family:var(--f-display);font-weight:400;font-size:clamp(2.4rem,8vw,5.6rem);line-height:.95;text-transform:uppercase}
+.shots-head h3 em{font-style:normal;color:var(--gold-2)}
+.shots-head h3 .bl{font-size:1.25em;line-height:0}
+.shots-head p{margin:0;max-width:44ch;font-size:.9rem;color:var(--panel-ink-2)}
+.filtros{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:20px;scrollbar-width:thin}
+.filtros button{all:unset;cursor:pointer;white-space:nowrap;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.2);font-size:.74rem;font-weight:600;letter-spacing:.08em;color:var(--panel-ink-2);text-transform:uppercase}
+.filtros button[aria-pressed=true]{background:var(--panel-ink);color:var(--panel);border-color:var(--panel-ink)}
+.filtros button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.shots{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.shot{all:unset;cursor:zoom-in;display:block;min-width:0;position:relative}
+.shot .im{position:relative;border-radius:3px;overflow:hidden;aspect-ratio:16/9;background:#222}
+.shot .im img{width:100%;height:100%;object-fit:cover}
+.shot:hover .im img{transform:scale(1.05)}
+.shot .nr{position:absolute;left:8px;top:6px;z-index:2;font-family:var(--f-mono);font-size:.66rem;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.8)}
+.shot b{display:block;margin-top:9px;font-family:var(--f-display);font-weight:600;text-transform:uppercase;font-size:.98rem;color:var(--panel-ink);line-height:1.1}
+.shot span{display:block;font-size:.78rem;color:var(--panel-ink-2);line-height:1.35;margin-top:3px}
+.shot:focus-visible .im{outline:2px solid var(--gold);outline-offset:2px}
+.shots-foot{margin-top:24px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:.8rem;color:var(--panel-ink-2)}
+.shots-foot b{color:var(--gold-2);font-weight:600}
+
+dialog.lb{border:0;padding:0;background:transparent;max-width:min(1100px,94vw);width:100%;color:#fff}
+dialog.lb::backdrop{background:rgba(8,8,8,.88);backdrop-filter:blur(4px)}
+.lb figure{margin:0}
+.lb img{width:100%;border-radius:4px}
+.lb figcaption{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-top:12px;flex-wrap:wrap}
+.lb figcaption b{font-family:var(--f-display);font-weight:400;font-size:1.8rem;text-transform:uppercase}
+.lb figcaption span{color:#bbb;font-size:.9rem}
+.lb .ctrl{display:flex;gap:8px;margin-top:14px;justify-content:flex-end}
+.lb .ctrl button{all:unset;cursor:pointer;padding:9px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.3);font-size:.78rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase}
+.lb .ctrl button:hover{background:rgba(255,255,255,.1)}
+.lb .ctrl button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+/* pós */
+.trilha{position:relative;margin-top:30px;padding:14px;border-radius:6px;overflow:hidden}
+.trilha .rg{display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:.62rem;color:var(--panel-ink-2);padding:0 2px 8px;border-bottom:1px solid rgba(255,255,255,.08)}
+.trilha .tk{display:flex;gap:3px;margin-top:8px;height:30px}
+.trilha .tk div{border-radius:3px;font-size:.64rem;font-family:var(--f-mono);color:rgba(0,0,0,.75);padding:7px 8px;white-space:nowrap;overflow:hidden;min-width:0}
+.trilha .v div{background:#d8d8d4}
+.trilha .v div:nth-child(3n){background:#bdbdb8}
+.trilha .t div{background:var(--gold-2)}
+.trilha .a div{background:#5e5e5a;color:#ddd;height:22px;margin-top:4px;
+  background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.35) 0 1px,transparent 1px 4px)}
+.trilha .ph{position:absolute;top:8px;bottom:8px;width:2px;background:#ff4a4a;left:var(--ph,10%);box-shadow:0 0 0 1px rgba(0,0,0,.3);transition:left .1s linear}
+.trilha .ph::before{content:"";position:absolute;top:-2px;left:-6px;border:7px solid transparent;border-top:9px solid #ff4a4a}
+.passos{list-style:none;margin:0;padding:0;counter-reset:p}
+.passos>li{position:relative;display:grid;grid-template-columns:110px minmax(0,1fr);gap:20px;padding:44px 0;border-top:1px solid var(--line)}
+.passos>li .pn{font-family:var(--f-black);font-weight:700;font-size:5.4rem;line-height:.8;background:var(--ouro);-webkit-background-clip:text;background-clip:text;color:transparent}
+@media (max-width:640px){.passos>li{grid-template-columns:minmax(0,1fr);gap:8px}.passos>li .pn{font-size:3.6rem}}
+.dv{list-style:none;margin:18px 0 0;padding:0;display:grid;gap:8px}
+.dv li{display:grid;grid-template-columns:30px minmax(0,1fr);gap:12px;padding:14px 16px;border-radius:6px;background:var(--glass);border:1px solid var(--line)}
+.dv li>i{font-style:normal;font-family:var(--f-mono);font-size:.74rem;color:var(--gold-3);padding-top:2px}
+.dv b{font-weight:700}
+.dv p{margin:2px 0 0;font-size:.9rem;color:var(--ink-2)}
+kbd{font-family:var(--f-mono);font-size:.74rem;padding:2px 6px;border-radius:4px;border:1px solid var(--line-2);border-bottom-width:2px;background:var(--glass-2);color:var(--ink);white-space:nowrap}
+.presets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:16px}
+.pk{position:relative;display:flex;flex-direction:column;gap:6px;padding:20px 18px 18px;border:1px solid var(--line);border-radius:6px;background:var(--glass);text-decoration:none;min-width:0;transition:transform .25s,border-color .25s}
+.pk:hover{transform:translateY(-3px);border-color:var(--gold)}
+.pk.novo{background:var(--panel);color:var(--panel-ink);border-color:transparent}
+.pk.novo span:not(.mono){color:var(--panel-ink-2)}
+.pk.novo::after{content:"MAIS NOVA";position:absolute;right:14px;top:14px;font-family:var(--f-mono);font-size:.6rem;padding:3px 7px;border-radius:3px;background:var(--gold);color:#111}
+.pk .mono{color:var(--gold-3);font-size:.68rem}
+.pk.novo .mono{color:var(--gold-2)}
+.pk b{font-family:var(--f-display);font-weight:600;font-size:1.15rem;text-transform:uppercase;line-height:1.1}
+.pk span{font-size:.84rem;color:var(--ink-2)}
+.pk .bt{margin-top:8px;align-self:flex-start;font-style:normal;font-weight:700;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;padding:8px 14px;border-radius:999px;background:var(--ouro);color:#111}
+.pk-como{font-size:.86rem;color:var(--ink-2);margin-top:14px}
+.pk-msg{font-size:.86rem;font-weight:600;color:var(--gold-3);margin-top:6px}
+@media (max-width:760px){.presets{grid-template-columns:minmax(0,1fr)}}
+.efeitos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:18px}
+.ef{position:relative;padding:20px;border-radius:6px;overflow:hidden;min-width:0}
+.ef b{display:block;font-family:var(--f-display);font-weight:600;text-transform:uppercase;font-size:1.3rem;margin-bottom:6px}
+.ef p{margin:0;font-size:.9rem}
+.ef small{display:block;margin-top:10px;font-family:var(--f-mono);font-size:.66rem;color:var(--gold-2)}
+.ef.flash::before{content:"";position:absolute;inset:0;background:#fff;opacity:0;animation:flash 3.2s infinite;pointer-events:none}
+@keyframes flash{0%,86%,100%{opacity:0}90%{opacity:.85}}
+.ef.inv{animation:inv 3.6s infinite}
+@keyframes inv{0%,82%,100%{filter:none}86%,90%{filter:invert(1)}}
+@media (max-width:640px){.efeitos{grid-template-columns:minmax(0,1fr)}}
+.estudo{display:grid;gap:8px;margin-top:14px}
+.estudo a{display:flex;justify-content:space-between;gap:12px;padding:12px 14px;border-bottom:1px solid var(--line);text-decoration:none;font-size:.9rem}
+.estudo a span{color:var(--ink-2);font-size:.8rem;white-space:nowrap}
+.estudo a:hover{background:var(--glass)}
+.cxh{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;margin-top:18px;border-radius:6px;overflow:hidden;border:1px solid var(--line-2)}
+.cxh>div{padding:24px;min-width:0}
+.cxh>div:first-child{background:var(--glass-2)}
+.cxh>div:last-child{background:var(--panel);color:var(--panel-ink)}
+.cxh b.t{display:block;font-family:var(--f-display);font-weight:400;text-transform:uppercase;font-size:1.9rem;line-height:1;margin-bottom:10px}
+.cxh .foco{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-3);margin-bottom:10px}
+.cxh>div:last-child .foco{color:var(--gold-2)}
+.cxh p{margin:0;font-size:.92rem}
+.cxh .mini{display:flex;gap:3px;margin-top:16px;height:18px}
+.cxh .mini i{display:block;border-radius:2px;background:currentColor;opacity:.25}
+.cxh .mini i.k{opacity:.9;background:var(--gold)}
+@media (max-width:640px){.cxh{grid-template-columns:minmax(0,1fr)}}
+
+/* ---------- bloco 4 ---------- */
+.usos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;margin-top:22px;border-top:1px solid var(--line)}
+.usos div{padding:18px 18px 18px 0;border-bottom:1px solid var(--line);min-width:0}
+.usos div:nth-child(odd){border-right:1px solid var(--line)}
+.usos div:nth-child(even){padding-left:18px}
+.usos b{display:block;font-family:var(--f-display);font-weight:600;text-transform:uppercase;font-size:1.05rem;margin-bottom:4px}
+.usos span{font-size:.88rem;color:var(--ink-2)}
+@media (max-width:640px){.usos{grid-template-columns:minmax(0,1fr)}.usos div,.usos div:nth-child(even){padding:16px 0;border-right:0}}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px;margin-top:16px}
+.card{display:grid;grid-template-columns:46px minmax(0,1fr);gap:14px;align-items:start;padding:16px;border-radius:6px;background:var(--glass);border:1px solid var(--line);min-width:0;transition:transform .25s,background .25s}
+.card:hover{transform:translateY(-2px);background:var(--glass-2)}
+.card .ic{width:46px;height:46px;border-radius:50%;display:grid;place-content:center;font-size:1.15rem;color:#111;background:linear-gradient(140deg,var(--gold-2),var(--gold) 60%,var(--gold-3));font-family:"Segoe UI Symbol","Apple Symbols","DejaVu Sans",sans-serif}
+.card b{display:block;font-family:var(--f-display);font-weight:600;text-transform:uppercase;font-size:1.02rem;line-height:1.15}
+.card span{display:block;font-size:.84rem;color:var(--ink-2);line-height:1.4;margin-top:3px}
+.card .st{display:inline-block;margin-top:8px;font-family:var(--f-mono);font-size:.62rem;padding:2px 7px;border-radius:3px;border:1px solid var(--line-2);color:var(--ink-2)}
+.sub-h{margin:34px 0 0;font-weight:700;font-size:.74rem;letter-spacing:.28em;text-transform:uppercase;color:var(--ink-2);display:flex;align-items:center;gap:12px}
+.sub-h::after{content:"";flex:1;height:1px;background:var(--line)}
+
+.modelos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:16px}
+.modelos.v{grid-template-columns:repeat(2,minmax(0,1fr))}
+.mod{padding:20px;border-radius:6px;background:var(--glass);border:1px solid var(--line);min-width:0;position:relative}
+.mod.main{background:var(--panel);color:var(--panel-ink);border-color:transparent}
+.mod.main .muted{color:var(--panel-ink-2)}
+.mod b{display:block;font-family:var(--f-display);font-weight:400;text-transform:uppercase;font-size:1.35rem;line-height:1.05;margin-bottom:8px}
+.mod .tag{position:absolute;right:14px;top:14px;font-family:var(--f-mono);font-size:.6rem;padding:3px 7px;border-radius:3px;background:var(--gold);color:#111}
+.mod span{font-size:.88rem}
+@media (max-width:760px){.modelos,.modelos.v{grid-template-columns:minmax(0,1fr)}}
+
+.film{margin-top:20px;padding:20px 0;position:relative;background:#0c0c0c;border-radius:4px;overflow:hidden}
+.film::before,.film::after{content:"";position:absolute;left:0;right:0;height:12px;z-index:2;pointer-events:none;
+  background:repeating-linear-gradient(90deg,transparent 0 10px,#e9e9e3 10px 20px,transparent 20px 30px);opacity:.75;
+  -webkit-mask:linear-gradient(#000,#000);}
+.film::before{top:4px}.film::after{bottom:4px}
+.film .rail{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 14px;scrollbar-width:thin}
+.film figure{flex:0 0 min(78%,480px);margin:0;scroll-snap-align:center;position:relative}
+.film figure img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:2px}
+.film figcaption{position:absolute;left:10px;bottom:8px;font-family:var(--f-mono);font-size:.66rem;color:#fff;text-shadow:0 1px 5px rgba(0,0,0,.8)}
+.figcap{font-size:.8rem;color:var(--ink-2);margin-top:10px}
+.ficha{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:18px}
+.ficha div{position:relative;padding:18px 14px 14px;border:1px solid var(--line);border-radius:6px;background:var(--glass);text-align:center;min-width:0}
+.ficha svg{width:74px;height:74px;display:block;margin:0 auto 10px}
+.ficha b{display:block;font-family:var(--f-display);font-weight:600;font-size:.92rem;text-transform:uppercase}
+.ficha span{font-family:var(--f-mono);font-size:.66rem;color:var(--gold-3)}
+@media (max-width:560px){.ficha{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.frames{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:16px}
+.frames figure{margin:0;position:relative;min-width:0}
+.frames img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:3px}
+.frames figcaption{display:flex;justify-content:space-between;margin-top:6px;font-family:var(--f-mono);font-size:.66rem;color:var(--ink-2)}
+.frames .bar{grid-column:1/-1;height:4px;border-radius:2px;background:var(--line);overflow:hidden}
+.frames .bar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--gold-3),var(--gold-2));transform-origin:0 50%;animation:voo 12s linear infinite}
+@keyframes voo{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media (max-width:560px){.frames{grid-template-columns:minmax(0,1fr)}}
+.criativos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:18px}
+.criativos figure{margin:0;min-width:0}
+.criativos .im{position:relative;border-radius:4px;overflow:hidden;aspect-ratio:16/9}
+.criativos .im img{width:100%;height:100%;object-fit:cover}
+.criativos .im i{position:absolute;right:8px;top:8px;z-index:2;font-style:normal;font-family:var(--f-mono);font-size:.62rem;color:#fff;background:rgba(0,0,0,.5);padding:2px 6px;border-radius:3px}
+.criativos figcaption{font-size:.84rem;margin-top:8px;color:var(--ink-2);line-height:1.4}
+.criativos figcaption b{color:var(--ink)}
+@media (max-width:800px){.criativos{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:480px){.criativos{grid-template-columns:minmax(0,1fr)}}
+
+/* ---------- rodapé ---------- */
+.fim{position:relative;padding-top:120px;overflow:clip;text-align:center}
+.fim .orn-top{color:var(--gold);width:40px;height:34px;margin:0 auto 20px;display:block}
+.fim .big{position:relative;z-index:1;margin:0;font-family:var(--f-display);font-weight:400;color:var(--display);font-size:min(13vw,8.6rem);line-height:1;letter-spacing:.02em;text-transform:uppercase}
+.fim .big span{display:block}
+.fim .big .bl{display:inline;font-size:1.3em;line-height:0;vertical-align:-.06em;margin-right:-.08em}
+.fim .side{position:absolute;top:150px;z-index:2}
+.fim .side.l{left:var(--gutter)}.fim .side.r{right:var(--gutter-r);color:var(--gold)}
+.fim .side.l .mono-lab{font-size:1.6rem}
+.fim .side.r svg{width:56px;height:34px}
+.fim .cena{position:relative;margin-top:-40px;height:min(62vw,620px)}
+.fim .cena .cidade{position:absolute;left:0;right:0;bottom:0;width:100%;height:78%;object-fit:cover;object-position:50% 70%;opacity:.85;
+  -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 38%);mask-image:linear-gradient(180deg,transparent 0,#000 38%)}
+.fim .cena .lentes2{position:absolute;left:50%;bottom:4%;width:min(34vw,330px);transform:translateX(-50%) rotate(-8deg);filter:drop-shadow(0 30px 30px rgba(0,0,0,.22));z-index:2}
+.fim-row{position:relative;z-index:3;padding-block:22px 28px;background:var(--bg);border-top:1px solid var(--line-2)}
+.fim-row .logo{font-size:20px}
+.topo{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border-radius:999px;background:var(--panel);color:var(--panel-ink);font-weight:600;font-size:.74rem;letter-spacing:.16em;text-transform:uppercase}
+.topo:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+@media (max-width:700px){.fim .side{display:none}.fim .cena .lentes2{width:46vw}}
+
+/* revelação ao rolar */
+.oc{opacity:0;transform:translateY(28px)}
+.rv{transition:opacity .9s cubic-bezier(.2,.7,.1,1), transform .9s cubic-bezier(.2,.7,.1,1)}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .oc{opacity:1;transform:none}
+}
+</style>
+
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="dia" viewBox="0 0 32 28"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M8 2h16l6 7-14 17L2 9z" fill="currentColor" fill-opacity=".18"/><path d="M2 9h28M12 2 9 9l7 17 7-17-3-7M9 9l7-7 7 7"/></g></symbol>
+    <symbol id="chev" viewBox="0 0 64 40"><g fill="currentColor"><path d="M0 12 10 2h12l-8 8h16l10-8h12L48 14H30l-8 6H8z"/><path d="M64 28 54 38H42l8-8H34l-10 8H12l12-12h18l8-6h14z"/></g></symbol>
+  </defs>
+</svg>
+
+<header class="nav" id="nav">
+  <div class="nav-in">
+    <a class="logo" href="#inicio" aria-label="LAB SP, voltar ao início"><span class="la">LA</span><span class="b">B</span><span class="sp">SP</span></a>
+    <span class="tc" aria-hidden="true"><i class="rec"></i><span id="tc">00:00:00:00</span></span>
+    <ul>
+      <li><a class="lk on" href="#inicio"><svg class="diamond"><use href="#dia"/></svg>Início</a></li>
+      <li><a class="lk" href="#quem-sou-eu"><svg class="diamond"><use href="#dia"/></svg>Quem sou eu</a></li>
+      <li><a class="lk" href="#pilares"><svg class="diamond"><use href="#dia"/></svg>3 Pilares</a></li>
+      <li><a class="lk" href="#workflow"><svg class="diamond"><use href="#dia"/></svg>Workflow</a></li>
+      <li><a class="lk" href="#ia"><svg class="diamond"><use href="#dia"/></svg>IA</a></li>
+    </ul>
+  </div>
+  <i class="prog" id="prog"></i>
+</header>
+
+<main>
+<!-- ================= ABERTURA ================= -->
+<section class="hero" id="inicio">
+  <span class="orn dl1" aria-hidden="true"><svg><use href="#dia"/></svg></span>
+  <span class="orn ch1" aria-hidden="true"><svg><use href="#chev"/></svg></span>
+  <div class="wrap">
+    <p class="bv"><span class="bl">B</span>em-vindos</p>
+    <h1 class="h1"><span class="sr">Workshop Lab Studio</span><span aria-hidden="true"><span class="bl w">W</span>ORK<span class="sx">S<span class="bl">S</span><span class="sp">SP</span></span>HOP</span></h1>
+    <div class="maos" id="lentes" aria-hidden="true"><img src="img/maos-ouro.webp" alt=""></div>
+    <p class="labt" aria-hidden="true"><span class="la">LA</span><span class="b">B</span><span class="dot">.</span><span class="st"><span class="bl">S</span>tudio</span></p>
+    <div class="by"><i>by</i><b>Rotband</b></div>
+    <span class="ex">EX <em>(31:3)</em><small>"E o enchi do Espírito de Deus, de habilidade, de inteligência e de conhecimento em todo artifício."</small></span>
+    <nav class="hero-foot" aria-label="Blocos do workshop">
+      <a href="#quem-sou-eu"><span class="n">BLOCO 01</span><span class="t">Quem sou eu</span><span class="d">Fruto da POIEMA, testemunho</span></a>
+      <a href="#pilares"><span class="n">BLOCO 02</span><span class="t">3 pilares</span><span class="d">Sensibilidade · Identidade · Mensagem</span></a>
+      <a href="#workflow"><span class="n">BLOCO 03</span><span class="t">Meu workflow</span><span class="d">Pré · Durante · Pós</span></a>
+      <a href="#ia"><span class="n">BLOCO 04</span><span class="t">IA no workflow</span><span class="d">Claude, Higgsfield, Seedance</span></a>
+    </nav>
+    <div class="hero-tag"><span>Audiovisual para igrejas</span><span class="scroll-cue">Role</span></div>
+  </div>
+</section>
+
+<div class="ticker" aria-hidden="true"><div class="tr">
+  <span>Sensibilidade <svg class="diamond"><use href="#dia"/></svg> Identidade <svg class="diamond"><use href="#dia"/></svg> Mensagem <svg class="diamond"><use href="#dia"/></svg> Pré <svg class="diamond"><use href="#dia"/></svg> Durante <svg class="diamond"><use href="#dia"/></svg> Pós <svg class="diamond"><use href="#dia"/></svg> IA no workflow <svg class="diamond"><use href="#dia"/></svg></span>
+  <span>Sensibilidade <svg class="diamond"><use href="#dia"/></svg> Identidade <svg class="diamond"><use href="#dia"/></svg> Mensagem <svg class="diamond"><use href="#dia"/></svg> Pré <svg class="diamond"><use href="#dia"/></svg> Durante <svg class="diamond"><use href="#dia"/></svg> Pós <svg class="diamond"><use href="#dia"/></svg> IA no workflow <svg class="diamond"><use href="#dia"/></svg></span>
+</div></div>
+
+<!-- ================= BLOCO 1 ================= -->
+<section class="bloco" id="quem-sou-eu" data-bloco>
+  <div class="wrap">
+    <div class="cab">
+      <span class="num-fundo" aria-hidden="true">01</span>
+      <span class="cab-orn" aria-hidden="true"><svg><use href="#dia"/></svg><svg class="ch"><use href="#chev"/></svg></span>
+      <div class="cab-top"><span class="eyebrow">Bloco 01</span><i class="ln"></i><span class="cnt">01 / 04</span></div>
+      <div class="b1-cab">
+        <div>
+          <h2 class="h2"><span class="bl">Q</span>uem<br>sou <span class="out">eu</span></h2>
+          <div class="cab-sub"><p>Isaac Rotband</p><span class="pill">Collab · equipe de mídia da POIEMA</span></div>
+        </div>
+        <img class="pessoa" src="img/lentes-ouro.webp" alt="" aria-hidden="true" loading="lazy">
+      </div>
+    </div>
+
+    <div class="cap">
+      <article class="rv">
+        <div class="cn"><b>1</b><span>CAPÍTULO</span></div>
+        <h3 class="h4">Fruto da POIEMA</h3>
+        <div class="txt">
+          <p>Meu nome é Isaac Rotband, tenho 20 anos e trabalho com audiovisual há 3 anos. Eu sou fruto da POIEMA: estou lá há 18 anos. Nasci lá, cresci lá, fui moldado lá e hoje sirvo e trabalho lá. A minha vida inteira foi na POIEMA.</p>
+          <p>Não estou falando isso pra me pagar de crentão. Estou falando porque muitas das pessoas que a gente vai cuidar, em quem a gente vai plantar uma semente, em nome do Senhor Jesus, vão permanecer. E vão ser referência de permanência e de insistência no nosso meio.</p>
+        </div>
+      </article>
+      <article class="rv">
+        <div class="cn"><b>2</b><span>CAPÍTULO</span></div>
+        <h3 class="h4">Uma casa que serve</h3>
+        <div class="txt">
+          <p>Eu vim de uma casa muito envolvida com a igreja e com o servir. Minha mãe liderou o ministério durante vários anos: foi líder do Poeminhas por 6 anos. Eu também vi meu pai liderando, cuidando e ministrando pessoas. Hoje meu pai não está mais na igreja, mas eu cresci nessa casa.</p>
+          <p>Então não tinha como eu ser diferente. Desde cedo eu entendo o poder de servir, o zelo e o amor no servir. Eu amo estar aqui. Faço isso porque é o que eu amo fazer.</p>
+        </div>
+      </article>
+      <article class="rv">
+        <div class="cn"><b>3</b><span>CAPÍTULO</span></div>
+        <h3 class="h4">Como eu cheguei no audiovisual</h3>
+        <div class="txt">
+          <p>Na época eu trabalhava numa cafeteria. Um dia, conversando com a minha mãe, ela falou: "por que você não começa a trabalhar na igreja?" Fiquei um tempo pensando nisso.</p>
+          <p>Depois conversei com o Léo, que conheço há muitos anos, e ele falou pra eu colar. Depois conversei com a Jenny, que conheço desde os meus 8 anos, e ela fez a ponte pra eu entrar na Collab, a equipe de mídia da POIEMA.</p>
+          <p>E não existe coincidência, é Deus mesmo: no dia em que eu fui lá, estavam precisando de ajuda numa gravação do POIEMA Plus. Ajudei a carregar cabos, montar a iluminação, montar a câmera. Eu nunca tinha mexido numa câmera. Fui aprendendo, e desde então me apaixonei pelo audiovisual. Comecei servindo e, depois de um tempo, fui contratado.</p>
+        </div>
+      </article>
+      <article class="rv">
+        <div class="cn"><b>4</b><span>CAPÍTULO</span></div>
+        <h3 class="h4">Meu testemunho</h3>
+        <div class="txt">
+          <p>Eu tenho uma deficiência: uma doença degenerativa na visão, que faz com que eu vá perdendo o foco da vista ao longo da vida. Descobri aos 16 anos, são 4 anos convivendo com isso. Hoje devo ter um pouco menos de 50% da visão.</p>
+          <p>Mas eu acredito que tudo isso é pra testificar a glória de Deus. Na Bíblia inteira Ele usa os improváveis, e continua usando até hoje. Muitas vezes é complicado, mas eu sou extremamente grato por viver assim, porque sei que foi Deus quem escolheu.</p>
+          <p>Eu acredito muito que vou ser curado. Mas também tenho 100% de convicção de que Deus tem um propósito pra eu estar assim, e Ele continua usando o meu dom através disso.</p>
+          <p>"Como você faz as coisas? Não enxerga direito e trabalha com audiovisual?" Sim, sei que parece loucura. Mas é só Deus na minha vida. Por isso tudo o que eu tenho, eu declaro ao Senhor. Tudo o que eu já alcancei é do Senhor, porque realmente não faz sentido. E muitas coisas na nossa vida não vão fazer sentido, mas Deus faz.</p>
+        </div>
+      </article>
+    </div>
+
+    <div class="quote-xl rv centro">
+      <span class="qo l" aria-hidden="true"><svg><use href="#dia"/></svg></span>
+      <span class="qo r" aria-hidden="true"><svg><use href="#chev"/></svg></span>
+      <span class="mk" aria-hidden="true">“</span>
+      <blockquote>O audiovisual é um <em>jeito</em> de ver o mundo.</blockquote>
+      <cite>Isaac Rotband</cite>
+    </div>
+
+    <div class="dark fe rv" id="foco">
+      <div class="hud" aria-hidden="true"><span class="a">● FOCO MANUAL</span><span class="b">AF-C · 1/50 · f/2.8</span><span class="c">ISO 800</span><span class="d">5000K</span></div>
+      <i class="af" aria-hidden="true"></i>
+      <p class="pre">Eu acredito muito no que o apóstolo Paulo disse: eu não preciso viver pelas coisas que eu vejo. Preciso viver pelas coisas que eu não vejo.</p>
+      <blockquote id="verso">Porque vivemos por fé, e não pelo que vemos.</blockquote>
+      <cite>2 Coríntios 5:7</cite>
+    </div>
+  </div>
+</section>
+
+<div class="ticker frases" aria-label="Frases-chave do bloco 1"><div class="tr">
+  <span>"Eu sou fruto da POIEMA." <svg class="diamond"><use href="#dia"/></svg> "Não tinha como eu ser diferente." <svg class="diamond"><use href="#dia"/></svg> "Nunca tinha mexido numa câmera." <svg class="diamond"><use href="#dia"/></svg> "O audiovisual é um jeito de ver o mundo." <svg class="diamond"><use href="#dia"/></svg> "Deus usa os improváveis." <svg class="diamond"><use href="#dia"/></svg> "Muitas coisas não vão fazer sentido, mas Deus faz." <svg class="diamond"><use href="#dia"/></svg> "Viver pelas coisas que eu não vejo." <svg class="diamond"><use href="#dia"/></svg></span>
+  <span aria-hidden="true">"Eu sou fruto da POIEMA." <svg class="diamond"><use href="#dia"/></svg> "Não tinha como eu ser diferente." <svg class="diamond"><use href="#dia"/></svg> "Nunca tinha mexido numa câmera." <svg class="diamond"><use href="#dia"/></svg> "O audiovisual é um jeito de ver o mundo." <svg class="diamond"><use href="#dia"/></svg> "Deus usa os improváveis." <svg class="diamond"><use href="#dia"/></svg> "Muitas coisas não vão fazer sentido, mas Deus faz." <svg class="diamond"><use href="#dia"/></svg> "Viver pelas coisas que eu não vejo." <svg class="diamond"><use href="#dia"/></svg></span>
+</div></div>
+
+<!-- ================= BLOCO 2 ================= -->
+<section class="bloco" id="pilares" data-bloco>
+  <div class="wrap">
+    <div class="cab">
+      <span class="num-fundo" aria-hidden="true">02</span>
+      <span class="cab-orn" aria-hidden="true"><svg><use href="#dia"/></svg><svg class="ch"><use href="#chev"/></svg></span>
+      <div class="cab-top"><span class="eyebrow">Bloco 02</span><i class="ln"></i><span class="cnt">02 / 04</span></div>
+      <h2 class="h2">3 <span class="bl">P</span>ilares<br><span class="out">do criativo</span><br>cristão</h2>
+      <div class="cab-sub"><span class="pill">Sensibilidade</span><span class="pill">Identidade</span><span class="pill">Mensagem</span></div>
+    </div>
+    <p class="lead rv" style="margin:0 0 40px">Pra mim, o ponto principal da criatividade é entender que você precisa ter três pilares dentro de você: a sensibilidade, a identidade e a mensagem.</p>
+
+    <div class="pilares">
+      <article class="pilar rv">
+        <span class="rn" aria-hidden="true">I</span>
+        <h3>Sensibilidade</h3>
+        <p>A gente precisa estar sensível ao que o Espírito Santo quer dizer, ao que Ele quer que a gente faça e produza. A gente não pode criar as coisas só por criar.</p>
+        <p class="muted">É claro que, em algum momento, a gente vai esbarrar na rotina: vai precisar fazer por fazer, entregar uma demanda, cumprir uma tarefa, cumprir uma responsabilidade. Mas a gente precisa estar sensível pra criar quando o Espírito Santo quiser que a gente crie algo, e transmitir Ele nas nossas criações.</p>
+        <p class="hl">Não é só criar. É ouvir antes de criar.</p>
+      </article>
+      <article class="pilar dark rv">
+        <span class="rn" aria-hidden="true">II</span>
+        <h3>Identidade</h3>
+        <p>A gente precisa entender a nossa identidade: a gente não é escravo, a gente é filho.</p>
+        <p class="muted">E, já que somos filhos, precisamos ter temor pelo nosso Pai e adorar o nosso Pai. O que a gente faz é adoração, porque somos filhos, e não escravos.</p>
+        <p class="hl">"Assim, você já não é mais escravo, mas filho."<small>Gálatas 4:7</small></p>
+      </article>
+      <article class="pilar rv">
+        <span class="rn" aria-hidden="true">III</span>
+        <h3>Mensagem</h3>
+        <p>Tudo o que a gente for fazer precisa transmitir uma mensagem. Se a gente faz um vídeo só por fazer, não está sendo sensível ao Espírito Santo pra transmitir a mensagem que Ele quer. Ou seja: transmitir a mensagem também é estar sensível.</p>
+        <p class="muted">Cada vídeo, cada arte, cada coisa que a gente produzir: você tem que olhar e pensar "isso aqui não é só um vídeo, isso aqui pode se tornar uma mensagem".</p>
+        <p class="hl">Tudo o que a gente faz pode se tornar uma mensagem.</p>
+      </article>
+    </div>
+
+    <div class="dark quinze rv">
+      <div class="ring" aria-hidden="true">
+        <svg viewBox="0 0 200 200"><circle class="bgc" cx="100" cy="100" r="92"/><circle class="fg" cx="100" cy="100" r="92"/></svg>
+        <div class="lbl"><b>15s</b><span><i></i>REC</span></div>
+      </div>
+      <div>
+        <p class="q">Um vídeo de 15 segundos, pra pessoa certa, vira uma mensagem.</p>
+        <p class="muted" style="margin:0 0 18px;max-width:56ch">"Ah, mas é um vídeo simples de 15 segundos." Cara, pra pessoa certa, isso se torna uma mensagem. E isso vale pra vida inteira: tudo o que a gente fizer precisa levar e deixar uma mensagem.</p>
+        <div class="chips"><span>Pra quem está trancada no quarto</span><span>Pra quem passa por uma fase difícil</span><span>Pra pessoa certa</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ticker frases rev preto" aria-label="Frases-chave do bloco 2"><div class="tr">
+  <span>"A gente não pode criar só por criar." <svg class="diamond"><use href="#dia"/></svg> "Não somos escravos, somos filhos." <svg class="diamond"><use href="#dia"/></svg> "O que a gente faz é adoração." <svg class="diamond"><use href="#dia"/></svg> "Tudo o que a gente faz pode se tornar uma mensagem." <svg class="diamond"><use href="#dia"/></svg> "Isso aqui não é só um vídeo." <svg class="diamond"><use href="#dia"/></svg> "Pra pessoa certa, 15 segundos viram uma mensagem." <svg class="diamond"><use href="#dia"/></svg></span>
+  <span aria-hidden="true">"A gente não pode criar só por criar." <svg class="diamond"><use href="#dia"/></svg> "Não somos escravos, somos filhos." <svg class="diamond"><use href="#dia"/></svg> "O que a gente faz é adoração." <svg class="diamond"><use href="#dia"/></svg> "Tudo o que a gente faz pode se tornar uma mensagem." <svg class="diamond"><use href="#dia"/></svg> "Isso aqui não é só um vídeo." <svg class="diamond"><use href="#dia"/></svg> "Pra pessoa certa, 15 segundos viram uma mensagem." <svg class="diamond"><use href="#dia"/></svg></span>
+</div></div>
+
+<!-- ================= BLOCO 3 ================= -->
+<section class="bloco" id="workflow" data-bloco>
+  <div class="wrap">
+    <div class="cab">
+      <span class="num-fundo" aria-hidden="true">03</span>
+      <span class="cab-orn" aria-hidden="true"><svg><use href="#dia"/></svg><svg class="ch"><use href="#chev"/></svg></span>
+      <div class="cab-top"><span class="eyebrow">Bloco 03</span><i class="ln"></i><span class="cnt">03 / 04</span></div>
+      <h2 class="h2"><span class="bl">M</span>eu<br><span class="out">work</span>flow</h2>
+      <div class="cab-sub"><p>PDP: Pré · Durante · Pós</p><span class="pill">O maior e mais denso bloco</span></div>
+    </div>
+
+    <nav class="etapas rv" aria-label="Etapas do workflow">
+      <a href="#pre"><span class="mono">ETAPA 1</span><b>Pré</b><span>Planejamento, referência, organização e roteiro</span></a>
+      <a href="#durante"><span class="mono">ETAPA 2</span><b>Durante</b><span>Câmera, lente, configuração e enquadramento</span></a>
+      <a href="#pos"><span class="mono">ETAPA 3</span><b>Pós</b><span>Log, decupagem, edição, montagem e efeitos</span></a>
+    </nav>
+
+    <!-- PRÉ -->
+    <div class="fase" id="pre">
+      <div class="fase-tit"><h3><span class="bl">P</span>ré</h3><p><span class="mono">PRÉ-PRODUÇÃO</span>Tudo o que acontece antes de ligar a câmera.</p></div>
+
+      <div class="sec">
+        <div class="l"><div class="stick"><span class="idx">PRÉ · 01</span><h4 class="h3">Planejamento</h4><p class="muted" style="margin:0">Nossos planos submetidos ao plano de Deus.</p></div></div>
+        <div class="txt rv">
+          <p>O planejamento é muito importante. Mas ele não pode substituir o Espírito Santo, aquilo que Ele está nos guiando a fazer. Às vezes a gente planeja tudo e acontece outra coisa.</p>
+          <p>Isso não quer dizer ficar refém do "na hora a gente vê, na hora a gente discerne". A gente tem que organizar e tem que planejar. Mas os nossos planos precisam estar submetidos ao plano de Deus. E, se não estiverem, Deus vai querer que a gente mude tudo e refaça de outro jeito. E está tudo bem.</p>
+          <p class="call">Planejar é obrigação. Mudar o plano quando Deus pedir também.</p>
+          <p style="margin-top:28px"><b>Como planejar:</b> antes de executar qualquer coisa, entenda a essência do que você vai fazer. Pergunte:</p>
+          <ol class="perg">
+            <li><span>01</span>O que esse evento precisa?</li>
+            <li><span>02</span>O que o vídeo desse evento tem que transmitir e mostrar pra galera?</li>
+            <li><span>03</span>Qual é a mensagem que esse evento tem que passar?</li>
+            <li><span>04</span>Quando é pra um ministério: qual mensagem esse ministério quer transmitir?</li>
+          </ol>
+          <p style="margin-top:18px;font-weight:700">Primeiro vem o entendimento. Depois, a execução.</p>
+        </div>
+      </div>
+
+      <div class="sec">
+        <div class="l"><div class="stick"><span class="idx">PRÉ · 02</span><h4 class="h3">Referência</h4><p class="muted" style="margin:0">Com a essência entendida, é hora de executar. E isso começa buscando referência.</p></div></div>
+        <div class="rv">
+          <p style="margin:0">Onde eu busco:</p>
+          <div class="refs">
+            <a class="ref" href="https://www.youtube.com" target="_blank" rel="noopener"><span class="mono">youtube.com</span><b>YouTube</b><span>Tutoriais, making ofs e referências de vídeo.</span></a>
+            <a class="ref" href="https://eyecannndy.com" target="_blank" rel="noopener"><span class="mono">eyecannndy.com</span><b>Eyecannndy</b><span>Biblioteca de técnicas visuais em vídeo.</span></a>
+            <a class="ref" href="https://shotdeck.com" target="_blank" rel="noopener"><span class="mono">shotdeck.com</span><b>ShotDeck</b><span>Banco de frames de filmes e séries.</span></a>
+            <a class="ref" href="https://www.instagram.com" target="_blank" rel="noopener"><span class="mono">instagram.com</span><b>Instagram</b><span>O que está sendo feito agora, no feed e nos Reels.</span></a>
+            <div class="ref"><span class="mono">tela grande</span><b>Filmes e séries</b><span>E várias outras produções.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sec">
+        <div class="l"><div class="stick"><span class="idx">PRÉ · 03</span><h4 class="h3">Organização</h4><p class="muted" style="margin:0"><a class="lk-ouro" href="https://app.milanote.com/1WEWBn1cls7D3A/influa-conf-2k26?p=I4YMoEwVuvk" target="_blank" rel="noopener">Milanote</a> e o bloco de notas do celular.</p></div></div>
+        <div class="txt rv">
+          <p>Depois de buscar, organize o que você tem. Eu uso o <a class="lk-ouro" href="https://app.milanote.com/1WEWBn1cls7D3A/influa-conf-2k26?p=I4YMoEwVuvk" target="_blank" rel="noopener">Milanote</a> e o próprio bloco de notas do celular. O importante é colocar as ideias num lugar só.</p>
+          <a class="ref mila" href="https://app.milanote.com/1WEWBn1cls7D3A/influa-conf-2k26?p=I4YMoEwVuvk" target="_blank" rel="noopener"><span class="mono">app.milanote.com</span><b>Ver o meu board no Milanote ↗</b><span>Exemplo real de organização: o board do Influa Conf 2K26.</span></a>
+          <p>Isso é pra você chegar na gravação com a consciência limpa. Porque é muito fácil cair no "tenho um monte de referência, mas não sei o que vou fazer" ou no "tenho um monte de ideia, mas não sei exatamente o que vou fazer". Organizar é transformar esse monte de coisa num plano.</p>
+          <div class="org" aria-label="De um monte de ideias a um plano">
+            <div class="caos" aria-hidden="true">
+              <span style="left:6%;top:10%;transform:rotate(-6deg)">print do Reels</span>
+              <span style="left:48%;top:6%;transform:rotate(4deg)">frame ShotDeck</span>
+              <span style="left:18%;top:40%;transform:rotate(3deg)">música?</span>
+              <span style="left:52%;top:44%;transform:rotate(-3deg)">ideia de abertura</span>
+              <span style="left:8%;top:72%;transform:rotate(-2deg)">plano drone</span>
+              <span style="left:50%;top:76%;transform:rotate(5deg)">frase do culto</span>
+            </div>
+            <span class="seta" aria-hidden="true">→</span>
+            <div class="plano">
+              <div>Abertura<i>gancho</i></div>
+              <div>Referências<i>milanote</i></div>
+              <div>Lista de planos<i>captação</i></div>
+              <div>Mensagem<i>roteiro</i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sec">
+        <div class="l"><div class="stick"><span class="idx">PRÉ · 04</span><h4 class="h3">Roteiro e storytelling</h4><p class="muted" style="margin:0">Talvez a parte mais importante.</p></div></div>
+        <div class="txt rv">
+          <p>O storytelling é uma das partes mais importantes, talvez a mais importante. Porque a mensagem que a gente vai transmitir é o que a gente vai falar. Ela tem que ser muito bem trabalhada: a gente não pode falar qualquer coisa, nem citar qualquer coisa.</p>
+          <p>Seja um vídeo curto, médio ou longo, a base é sempre a mesma:</p>
+          <div class="arco" role="img" aria-label="Arco do roteiro: gancho, desenvolvimento, clímax e desfecho">
+            <svg viewBox="0 0 620 250">
+              <defs><linearGradient id="arcoG" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#d39a2e" stop-opacity=".35"/><stop offset="1" stop-color="#d39a2e" stop-opacity="0"/></linearGradient></defs>
+              <path class="ar" d="M40 150 C 120 140, 170 120, 230 112 S 380 22, 440 32 S 540 120, 580 140 L580 180 L40 180 Z"/>
+              <path class="cv" d="M40 150 C 120 140, 170 120, 230 112 S 380 22, 440 32 S 540 120, 580 140"/>
+              <line class="dr" x1="40" y1="150" x2="40" y2="190"/><line class="dr" x1="230" y1="112" x2="230" y2="190"/><line class="dr" x1="440" y1="32" x2="440" y2="190"/><line class="dr" x1="580" y1="140" x2="580" y2="190"/>
+              <circle class="pt" cx="40" cy="150" r="8"/><circle class="pt" cx="230" cy="112" r="8"/><circle class="pt" cx="440" cy="32" r="9"/><circle class="pt" cx="580" cy="140" r="8"/>
+              <text x="30" y="210">Gancho</text><text class="s" x="30" y="228">prende a atenção nos</text><text class="s" x="30" y="243">primeiros segundos</text>
+              <text x="190" y="210">Desenvolvimento</text><text class="s" x="190" y="228">constrói a história</text>
+              <text x="412" y="210">Clímax</text><text class="s" x="412" y="228">o ponto mais forte</text>
+              <text x="526" y="210">Desfecho</text><text class="s" x="496" y="228">fecha e deixa a mensagem</text>
+            </svg>
+          </div>
+          <p style="margin-top:22px">A partir dessa base você vai destrinchando, de acordo com o projeto. Pra montar os meus roteiros, eu uso uma skill de roteiro que eu criei no Claude.</p>
+          <p>O roteiro precisa ser construído. Mesmo que o seu vídeo seja lindo, se a mensagem for fraca, ninguém vai entender e ninguém vai se conectar, e o vídeo vai ter sido feito à toa. Como eu falei no Bloco 2: o mais importante é a mensagem que você carrega.</p>
+          <p class="call">Vídeo magnífico com mensagem fraca é vídeo à toa.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- DURANTE -->
+    <div class="fase" id="durante">
+      <div class="fase-tit"><h3><span class="bl">D</span>urante</h3><p><span class="mono">CAPTAÇÃO</span>A câmera na mão: equipamento, ajustes e enquadramento.</p></div>
+
+      <div class="sec">
+        <div class="l"><div class="stick"><span class="idx">DURANTE · 01</span><h4 class="h3">O que é uma câmera</h4><p class="muted" style="margin:0">Corpo, sensor e lente.</p></div></div>
+        <div class="txt rv">
+          <p>A câmera é a principal ferramenta que a gente usa pra gravar e documentar os nossos projetos. Hoje o celular também está muito forte, mas o princípio é o mesmo. De forma bem simples, toda câmera tem duas partes:</p>
+          <ul class="dl">
+            <li><b>Corpo:</b> é a câmera em si. Dentro dele fica o sensor: a peça que recebe a luz e transforma em imagem. É o "filme" da câmera digital.</li>
+            <li><b>Lente:</b> fica na frente do sensor e controla como a luz chega até ele: quanto entra, o que fica em foco e o quanto da cena aparece.</li>
+          </ul>
+          <div class="dark diag" role="img" aria-label="Diagrama: a luz passa pela lente e chega ao sensor dentro do corpo da câmera">
+            <svg viewBox="0 0 640 220">
+              <g stroke="#f3c867" stroke-width="1.5" opacity=".85" fill="none">
+                <path d="M20 60 L250 84 L470 112"/><path d="M20 110 L250 110 L470 110"/><path d="M20 160 L250 136 L470 108"/>
+              </g>
+              <text x="20" y="44">luz</text>
+              <rect x="212" y="58" width="110" height="104" rx="10" fill="#1c1c1b" stroke="#555"/>
+              <g fill="none" stroke="#8a8a85"><line x1="232" y1="58" x2="232" y2="162"/><line x1="246" y1="58" x2="246" y2="162"/><line x1="300" y1="58" x2="300" y2="162"/></g>
+              <ellipse cx="262" cy="110" rx="12" ry="44" fill="rgba(243,200,103,.18)" stroke="#f3c867"/>
+              <rect x="322" y="34" width="250" height="152" rx="14" fill="#232322" stroke="#666"/>
+              <rect x="458" y="76" width="12" height="68" fill="#f3c867"/>
+              <text class="t" x="232" y="190">Lente</text><text x="232" y="206">escolhe a luz</text>
+              <text class="t" x="428" y="62">Sensor</text><text x="380" y="166">registra a luz</text>
+              <text class="t" x="500" y="208">Corpo</text><text x="500" y="24">vira arquivo</text>
+            </svg>
+          </div>
+          <p class="call">Em resumo: a lente escolhe a luz, o sensor registra a luz e o corpo transforma isso em arquivo.</p>
+
+          <h4 class="h4" style="margin-top:40px">Tipos de sensor</h4>
+          <p>Quanto maior o sensor, mais luz ele capta: melhor em pouca luz e mais fácil de conseguir fundo desfocado. Em compensação, a câmera e as lentes costumam ser maiores e mais caras.</p>
+          <div class="sens">
+            <div class="box">
+              <svg viewBox="0 0 320 222" role="img" aria-label="Tamanhos de sensor em escala">
+                <rect class="ff" x="16" y="14" width="288" height="192"/>
+                <rect class="ap" x="16" y="81" width="188" height="125"/>
+                <rect class="m4" x="16" y="102" width="138" height="104"/>
+                <rect class="ce" x="16" y="147" width="78" height="59"/>
+                <text class="tff" x="296" y="30" text-anchor="end">Full Frame 36×24</text>
+                <text class="tap" x="196" y="96" text-anchor="end">APS-C 23,5×15,6</text>
+                <text class="tm4" x="22" y="118">Micro 4/3</text>
+                <text class="tce" x="22" y="163">Celular</text>
+              </svg>
+              <div class="cap2">Áreas em escala real (mm). Celular: sensor de ~1/1,3".</div>
+            </div>
+            <ul class="dl">
+              <li><b>Full Frame:</b> o maior dos comuns, mesmo tamanho do filme 35mm. Ex.: Sony A7 IV, FX3.</li>
+              <li><b>APS-C:</b> menor que o Full Frame, ótimo custo-benefício. Ex.: Sony FX30, ZV-E10. Ele "corta" a imagem: uma lente de 50mm se comporta como uma de ~75mm.</li>
+              <li><b>Micro 4/3:</b> ainda menor. Câmeras mais compactas (Panasonic, Olympus).</li>
+              <li><b>Celular:</b> sensor bem pequeno, compensado com muito processamento de imagem.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="sec">
+        <div class="l"><div class="stick"><span class="idx">DURANTE · 02</span><h4 class="h3">Como escolher uma câmera</h4><p class="muted" style="margin:0">A melhor câmera é a que melhor te atende.</p></div></div>
+        <div class="txt rv">
+          <p>Vai muito de gosto e muito do trabalho que você faz. As perguntas que eu faço:</p>
+          <ol class="perg">
+            <li><span>01</span>Como ela grava? Grava em log? (perfil de imagem "lavado", que guarda mais informação de luz e cor pra você tratar na edição)</li>
+            <li><span>02</span>Qual resolução e taxa de quadros? Ex.: 4K a 60 quadros por segundo (4K60) permite câmera lenta em 4K.</li>
+            <li><span>03</span>Qual formato de arquivo? Isso pesa no armazenamento e na edição.</li>
+            <li><span>04</span>Ela é compacta pro meu workflow? Ela se encaixa no jeito que eu trabalho?</li>
+          </ol>
+          <h4 class="h4" style="margin-top:36px">Sony ou Canon?</h4>
+          <div class="vs">
+            <div class="sony"><span class="tag">A MAIS CORINGA: FX30</span><b class="mk">Sony</b><p>É a marca que mais me atende em relação a lentes: tem muitas opções, inclusive de baixo orçamento. A FX30 entrega um custo-benefício muito bom: qualidade boa e preço bom. Pra filmagem, eu sempre vou escolher Sony, porque o uso e o foco automático dela são muito bons.</p></div>
+            <div class="canon"><b class="mk">Canon</b><p>Também é muito boa, principalmente pra foto, e também tem muitas lentes. Mas depende muito do modelo: eu não entendo tanto de Canon, mas sei que tem várias câmeras dela que são excelentes.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sec">
+        <div class="l"><div class="stick"><span class="idx">DURANTE · 03</span><h4 class="h3">Como funciona uma lente</h4><p class="muted" style="margin:0">Dois números principais: a abertura (f) e a distância focal (mm).</p></div></div>
+        <div class="txt rv">
+          <h4 class="h4">Abertura (f): a íris</h4>
+          <p>É o "buraco" por onde a luz entra. Aparece como f/1.8, f/2.8, f/4… E a regra é ao contrário do que parece: número menor, lente mais aberta. Arraste e veja.</p>
+          <div class="dark iris">
+            <div class="ctl">
+              <div class="top">
+                <div class="fval"><small>f/</small><span id="fnum">1.8</span></div>
+                <svg class="bl" viewBox="-60 -60 120 120" aria-hidden="true">
+                  <circle r="56" fill="#1c1c1b" stroke="#555" stroke-width="2"/>
+                  <circle r="48" fill="#0a0a0a"/>
+                  <polygon id="abert" fill="url(#irisG)" points=""/>
+                  <defs><radialGradient id="irisG"><stop offset="0" stop-color="#f3c867"/><stop offset="1" stop-color="#a8721b"/></radialGradient></defs>
+                  <g id="laminas" stroke="#333" stroke-width="1" fill="none"></g>
+                </svg>
+              </div>
+              <label class="sr" for="fslider">Abertura da lente</label>
+              <input type="range" id="fslider" min="0" max="8" step="1" value="1">
+              <div class="esc" aria-hidden="true"><span>f/1.4</span><span>f/2.8</span><span>f/5.6</span><span>f/11</span><span>f/16</span></div>
+              <div class="met">
+                <div>Luz que entra<i id="mLuz"></i></div>
+                <div>Fundo desfocado<i id="mDes"></i></div>
+                <div>Coisas em foco<i id="mFoc"></i></div>
+              </div>
+              <p class="desc" id="fdesc"></p>
+            </div>
+            <div class="pv" aria-hidden="true">
+              <img class="fundo" src="img/s/shot-close-up.jpg" alt="">
+              <img class="sujeito" src="img/s/shot-close-up.jpg" alt="">
+              <div class="hudp"><span>50mm</span><span id="fhud">f/1.8 · 1/50 · ISO 400</span></div>
+            </div>
+          </div>
+          <ul class="dl" style="margin-top:18px">
+            <li><b>Número menor (f/1.8)</b> = lente mais aberta = entra mais luz e o fundo fica mais desfocado.</li>
+            <li><b>Número maior (f/8)</b> = lente mais fechada = entra menos luz e mais coisa fica em foco.</li>
+          </ul>
+
+          <h4 class="h4" style="margin-top:40px">Distância focal (mm)</h4>
+          <p>Define o quanto da cena aparece. Quanto menor a milimetragem, mais aberto o plano; quanto maior, mais fechado.</p>
+          <div class="focal">
+            <div class="vw"><img id="fimg" src="img/s/shot-wide.jpg" alt="Mesma cena vista com lentes de distâncias focais diferentes" loading="lazy"><span class="mm" id="fmm">16mm</span></div>
+            <div class="bt" role="group" aria-label="Escolha a distância focal">
+              <button type="button" aria-pressed="true" data-z="1" data-mm="16mm"><span class="mono">7–16mm</span><b>Grande angular</b><span>Mostra muito do ambiente.</span></button>
+              <button type="button" aria-pressed="false" data-z="2.1" data-mm="50mm"><span class="mono">35–50mm</span><b>Normal</b><span>Parecido com o olho humano.</span></button>
+              <button type="button" aria-pressed="false" data-z="4" data-mm="100mm"><span class="mono">75–100mm+</span><b>Teleobjetiva</b><span>Aproxima e isola o assunto.</span></button>
+            </div>
+          </div>
+
+          <h4 class="h4" style="margin-top:40px">Partes da lente</h4>
+          <div class="partes">
+            <div><b>Anel de foco</b><span>Quase toda lente tem.</span></div>
+            <div><b>Anel de zoom</b><span>Só nas lentes zoom (ex.: 18–105mm). Lente fixa (ex.: 50mm) não tem: pra mudar o plano, você anda.</span></div>
+            <div><b>Anel de íris</b><span>Algumas lentes têm controle manual da abertura no próprio anel; em outras, isso é feito pela câmera.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sec">
+        <div class="l"><div class="stick"><span class="idx">DURANTE · 04</span><h4 class="h3">Como usar a câmera</h4><p class="muted" style="margin:0">Quatro ajustes controlam a imagem. Os três primeiros controlam a exposição.</p></div></div>
+        <div class="rv">
+          <div class="ajustes">
+            <div class="aj"><div class="k"><b>Íris</b><span>f/2.8</span></div><p>A quantidade de luz que entra pela lente. Também controla o desfoque do fundo.</p><span class="tag">Exposição</span></div>
+            <div class="aj"><div class="k"><b>Obturador</b><span>1/50</span></div><p>Por quanto tempo o sensor recebe luz em cada quadro. Regra prática pra vídeo: o dobro dos quadros por segundo (gravando a 30fps, use 1/60; a 60fps, 1/125). Assim o movimento fica natural.</p><span class="tag">Exposição</span></div>
+            <div class="aj"><div class="k"><b>ISO</b><span>ISO 400</span></div><p>A sensibilidade da câmera à luz. Aumentar clareia a imagem, mas, em excesso, gera ruído (granulado). Use o mais baixo que der.</p><span class="tag">Exposição</span></div>
+            <div class="aj"><div class="k"><b>Foco</b><span>AF / MF</span></div><p>O que fica nítido na imagem. Pode ser automático ou manual (pelo anel de foco).</p><span class="tag">Nitidez</span></div>
+          </div>
+          <p class="sub-h">Ordem prática</p>
+          <div class="ordem">
+            <div><i>1º</i><b>Velocidade</b><span>Defina pela regra do dobro.</span></div>
+            <div><i>2º</i><b>Abertura</b><span>Escolha pelo desfoque que você quer.</span></div>
+            <div><i>3º</i><b>ISO</b><span>Ajuste por último.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sec">
+        <div class="l"><div class="stick"><span class="idx">DURANTE · 05</span><h4 class="h3">Configuração de câmera</h4><p class="muted" style="margin:0">Pensando na Sony FX30 e nas câmeras dessa linha.</p></div></div>
+        <div class="txt rv">
+          <p>Essas são as minhas configurações padrão pra captação. A regra geral: tudo no manual que for possível, nada no automático. Assim a imagem não muda sozinha no meio do take.</p>
+          <div class="lcd" aria-label="Tela da câmera com a configuração base">
+            <div class="bar"><span class="r"><i></i>STBY</span><span>S-LOG3 · S-GAMUT3.CINE</span><span>4K · XAVC S</span><span>▮▮▮▯ 74%</span></div>
+            <div class="gr">
+              <div><small>PERFIL</small><b class="g">S-LOG3</b></div>
+              <div><small>PICTURE PROFILE</small><b>PP OFF</b></div>
+              <div><small>FPS</small><b id="lcdFps">24p</b></div>
+              <div><small>OBTURADOR</small><b class="g" id="lcdSh">1/50</b></div>
+              <div><small>ISO</small><b>M · 800</b></div>
+              <div><small>BALANÇO DE BRANCO</small><b>5000K</b></div>
+            </div>
+            <div class="fps" role="group" aria-label="Escolha a taxa de quadros"><span>Taxa de quadros:</span>
+              <button type="button" aria-pressed="true" data-fps="24p" data-sh="1/50">24fps · cinema</button>
+              <button type="button" aria-pressed="false" data-fps="60p" data-sh="1/125">60fps · câmera lenta</button>
+            </div>
+          </div>
+          <ul class="dl" style="margin-top:22px">
+            <li><b>Perfil de cor: S-Log3</b> (com o gamut S-Gamut3.Cine): é o que a galera mais usa. A imagem sai "lavada", sem contraste, mas guarda muito mais informação de luz e cor pra você tratar na edição. Por isso, quem grava em log precisa fazer correção de cor depois.</li>
+            <li><b>Picture Profile (PP):</b> desligado (PP Off).</li>
+            <li><b>FPS:</b> depende do que você vai fazer, mas normalmente é um destes dois: 24fps pra uma imagem com cara de cinema, 60fps quando você quer câmera lenta.</li>
+            <li><b>Velocidade do obturador:</b> sempre o dobro do FPS. 24fps → 1/50; 60fps → 1/125.</li>
+            <li><b>ISO:</b> sempre no manual.</li>
+            <li><b>Balanço de branco:</b> depende da captação, mas normalmente eu deixo em 5000K. Também no manual, pra cor não ficar mudando entre os takes.</li>
+          </ul>
+          <p class="call">S-Log3 · PP Off · 24 ou 60fps · obturador no dobro do FPS · ISO manual · balanço de branco 5000K.<small>Minha configuração base</small></p>
+        </div>
+      </div>
+
+      <div class="sec" id="enquadramento">
+        <div class="l"><div class="stick"><span class="idx">DURANTE · 06</span><h4 class="h3">Enquadramento</h4><p class="muted" style="margin:0">É aqui que a câmera começa a contar a história.</p></div></div>
+        <div class="txt rv">
+          <p>Enquadrar é decidir o que entra na imagem, o que fica de fora e onde cada coisa fica.</p>
+          <h4 class="h4" style="margin-top:30px">Regra dos terços</h4>
+          <p>Imagine a tela dividida em 9 partes iguais por duas linhas horizontais e duas verticais (como um jogo da velha). Em vez de colocar o assunto bem no centro, você coloca ele em cima de uma das linhas ou num dos 4 pontos onde elas se cruzam. A imagem fica mais equilibrada e mais interessante.</p>
+          <ul class="dl">
+            <li>Num rosto, os olhos ficam na linha de cima.</li>
+            <li>O horizonte fica na linha de cima ou na de baixo, nunca cortando a tela ao meio.</li>
+            <li>Deixe espaço na direção do olhar ou do movimento da pessoa.</li>
+            <li>Quase toda câmera e celular tem a opção de mostrar a grade na tela: ative.</li>
+          </ul>
+          <button type="button" class="tbtn" id="gradeBtn" aria-pressed="false">▦ Mostrar a grade</button>
+        </div>
+      </div>
+      <div class="tercos rv" id="tercos">
+        <figure><div class="im vf bw"><img src="img/tercos-1.jpg" alt="Rosto com os olhos na linha de cima, pessoa no terço esquerdo" loading="lazy"><i class="g3"></i></div><figcaption><b>Rosto na linha de cima.</b> Os olhos ficam na linha horizontal de cima, e a pessoa fica no terço esquerdo, em vez de cortar a tela no meio.</figcaption></figure>
+        <figure><div class="im vf bw"><img src="img/tercos-2.jpg" alt="Pessoa no terço direito com horizonte perto da linha de cima" loading="lazy"><i class="g3"></i></div><figcaption><b>Pessoa no terço direito e horizonte fora do meio.</b> O horizonte fica perto da linha de cima, deixando o céu e a paisagem respirarem.</figcaption></figure>
+        <figure><div class="im vf bw"><img src="img/tercos-3.jpg" alt="Rosto perto de um ponto de cruzamento, sol do outro lado" loading="lazy"><i class="g3"></i></div><figcaption><b>Assunto num ponto de cruzamento.</b> O rosto fica perto do cruzamento da direita, e o sol, do outro lado, equilibra a imagem.</figcaption></figure>
+      </div>
+
+      <div class="sec" style="margin-top:40px">
+        <div class="l"><div class="stick"><span class="idx">DURANTE · 06</span><h4 class="h3">Planos</h4><p class="muted" style="margin:0">O tamanho da imagem, do mais aberto pro mais fechado.</p></div></div>
+        <div class="rv">
+          <ol class="planos">
+            <li><b>Plano geral</b><span>Mostra o ambiente inteiro; a pessoa é pequena. Situa o público: onde estamos?</span><i class="fr" style="--s:6"></i></li>
+            <li><b>Plano inteiro</b><span>A pessoa de corpo inteiro, da cabeça aos pés.</span><i class="fr" style="--s:12"></i></li>
+            <li><b>Plano americano</b><span>Dos joelhos pra cima.</span><i class="fr" style="--s:19"></i></li>
+            <li><b>Plano médio</b><span>Da cintura pra cima. O mais usado em entrevistas e falas.</span><i class="fr" style="--s:28"></i></li>
+            <li><b>Primeiro plano</b><span>Close: do peito pra cima. Mostra a emoção.</span><i class="fr" style="--s:42"></i></li>
+            <li><b>Primeiríssimo plano</b><span>Big close: só o rosto, bem de perto. Intensidade.</span><i class="fr" style="--s:64"></i></li>
+            <li><b>Plano detalhe</b><span>Um detalhe: mãos, olhos, um objeto. Ótimo pra inserts e B-roll.</span><i class="fr" style="--s:96"></i></li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="sec">
+        <div class="l"><div class="stick"><span class="idx">DURANTE · 06</span><h4 class="h3">Ângulos e posições</h4><p class="muted" style="margin:0">Onde a câmera está muda o que a cena diz.</p></div></div>
+        <div class="rv">
+          <div class="angulos">
+            <div><i>DE CIMA</i><b>Plongée</b><span>Do francês, "mergulho". Câmera de cima pra baixo. Deixa a pessoa menor, mais frágil.</span></div>
+            <div><i>DE BAIXO</i><b>Contra-plongée</b><span>Câmera de baixo pra cima. Deixa a pessoa maior, mais forte, imponente.</span></div>
+            <div><i>TOP DOWN</i><b>Plano zenital</b><span>Câmera totalmente de cima, olhando pra baixo. Muito usado em mesas, mãos e objetos.</span></div>
+            <div><i>SOBRE O OMBRO</i><b>Over the shoulder</b><span>Câmera atrás do ombro de uma pessoa, mostrando quem está na frente dela. Clássico de diálogo.</span></div>
+            <div><i>DIÁLOGO</i><b>Plano e contraplano</b><span>Alternar entre duas pessoas que conversam, uma de cada lado.</span></div>
+            <div><i>PONTO DE VISTA</i><b>POV</b><span>A câmera mostra o que o personagem está vendo.</span></div>
+            <div><i>DUTCH ANGLE</i><b>Plano holandês</b><span>Câmera inclinada. Passa tensão, desconforto.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dark shots-wrap" id="shots">
+        <div class="shots-head">
+          <h3><em>34</em> <span class="bl">S</span>hots</h3>
+          <p>Lista de referência baseada no vídeo "34 shot types every AI filmmaker should know". Mesmo sendo pensada pra IA, serve igual pra câmera, e os nomes em inglês são os que você vai usar nos prompts do Bloco 4.</p>
+        </div>
+        <div class="filtros" role="group" aria-label="Filtrar por categoria">
+          <button type="button" aria-pressed="true" data-f="todos">Todos · 34</button>
+          <button type="button" aria-pressed="false" data-f="tamanho">Tamanho do plano · 5</button>
+          <button type="button" aria-pressed="false" data-f="posicao">Posição · 6</button>
+          <button type="button" aria-pressed="false" data-f="altura">Altura e ângulo · 10</button>
+          <button type="button" aria-pressed="false" data-f="lentes">Lentes e foco · 6</button>
+          <button type="button" aria-pressed="false" data-f="luz">Luz e efeitos · 3</button>
+          <button type="button" aria-pressed="false" data-f="criativos">Criativos · 4</button>
+        </div>
+        <div class="shots" id="shotGrid">
+          <button type="button" class="shot bw" data-c="tamanho"><div class="im"><img src="img/s/shot-wide.jpg" alt="Wide: plano aberto: mostra o ambiente" loading="lazy"><i class="nr">01 · TAMANHO DO PLANO</i></div><b>Wide</b><span>plano aberto: mostra o ambiente</span></button>
+          <button type="button" class="shot bw" data-c="tamanho"><div class="im"><img src="img/s/shot-medium.jpg" alt="Medium: plano médio: da cintura pra cima" loading="lazy"><i class="nr">02 · TAMANHO DO PLANO</i></div><b>Medium</b><span>plano médio: da cintura pra cima</span></button>
+          <button type="button" class="shot bw" data-c="tamanho"><div class="im"><img src="img/s/shot-close-up.jpg" alt="Close-up: close: o rosto" loading="lazy"><i class="nr">03 · TAMANHO DO PLANO</i></div><b>Close-up</b><span>close: o rosto</span></button>
+          <button type="button" class="shot bw" data-c="tamanho"><div class="im"><img src="img/s/shot-macro.jpg" alt="Macro: detalhe extremo, bem de perto" loading="lazy"><i class="nr">04 · TAMANHO DO PLANO</i></div><b>Macro</b><span>detalhe extremo, bem de perto</span></button>
+          <button type="button" class="shot bw" data-c="tamanho"><div class="im"><img src="img/s/shot-wide-angle-close-up.jpg" alt="Wide-angle close-up: close com lente grande angular, rosto distorcido e ambiente aparecendo" loading="lazy"><i class="nr">05 · TAMANHO DO PLANO</i></div><b>Wide-angle close-up</b><span>close com lente grande angular, rosto distorcido e ambiente aparecendo</span></button>
+          <button type="button" class="shot bw" data-c="posicao"><div class="im"><img src="img/s/shot-profile.jpg" alt="Profile: de perfil, de lado" loading="lazy"><i class="nr">06 · POSIÇÃO</i></div><b>Profile</b><span>de perfil, de lado</span></button>
+          <button type="button" class="shot bw" data-c="posicao"><div class="im"><img src="img/s/shot-three-quarter.jpg" alt="Three-quarter: três quartos: entre o perfil e a frente" loading="lazy"><i class="nr">07 · POSIÇÃO</i></div><b>Three-quarter</b><span>três quartos: entre o perfil e a frente</span></button>
+          <button type="button" class="shot bw" data-c="posicao"><div class="im"><img src="img/s/shot-rear.jpg" alt="Rear: de costas" loading="lazy"><i class="nr">08 · POSIÇÃO</i></div><b>Rear</b><span>de costas</span></button>
+          <button type="button" class="shot bw" data-c="posicao"><div class="im"><img src="img/s/shot-over-the-shoulder.jpg" alt="Over-the-shoulder: sobre o ombro" loading="lazy"><i class="nr">09 · POSIÇÃO</i></div><b>Over-the-shoulder</b><span>sobre o ombro</span></button>
+          <button type="button" class="shot bw" data-c="posicao"><div class="im"><img src="img/s/shot-pov.jpg" alt="POV: ponto de vista do personagem" loading="lazy"><i class="nr">10 · POSIÇÃO</i></div><b>POV</b><span>ponto de vista do personagem</span></button>
+          <button type="button" class="shot bw" data-c="posicao"><div class="im"><img src="img/s/shot-selfie.jpg" alt="Selfie: a pessoa segurando a câmera" loading="lazy"><i class="nr">11 · POSIÇÃO</i></div><b>Selfie</b><span>a pessoa segurando a câmera</span></button>
+          <button type="button" class="shot bw" data-c="altura"><div class="im"><img src="img/s/shot-eye-level.jpg" alt="Eye-level: na altura dos olhos, neutro" loading="lazy"><i class="nr">12 · ALTURA E ÂNGULO</i></div><b>Eye-level</b><span>na altura dos olhos, neutro</span></button>
+          <button type="button" class="shot bw" data-c="altura"><div class="im"><img src="img/s/shot-low-angle.jpg" alt="Low-angle: de baixo pra cima (contra-plongée)" loading="lazy"><i class="nr">13 · ALTURA E ÂNGULO</i></div><b>Low-angle</b><span>de baixo pra cima (contra-plongée)</span></button>
+          <button type="button" class="shot bw" data-c="altura"><div class="im"><img src="img/s/shot-high-angle.jpg" alt="High-angle: de cima pra baixo (plongée)" loading="lazy"><i class="nr">14 · ALTURA E ÂNGULO</i></div><b>High-angle</b><span>de cima pra baixo (plongée)</span></button>
+          <button type="button" class="shot bw" data-c="altura"><div class="im"><img src="img/s/shot-dutch-angle.jpg" alt="Dutch angle: câmera inclinada (holandês)" loading="lazy"><i class="nr">15 · ALTURA E ÂNGULO</i></div><b>Dutch angle</b><span>câmera inclinada (holandês)</span></button>
+          <button type="button" class="shot bw" data-c="altura"><div class="im"><img src="img/s/shot-overhead.jpg" alt="Overhead: de cima, olhando pra baixo (zenital)" loading="lazy"><i class="nr">16 · ALTURA E ÂNGULO</i></div><b>Overhead</b><span>de cima, olhando pra baixo (zenital)</span></button>
+          <button type="button" class="shot bw" data-c="altura"><div class="im"><img src="img/s/shot-aerial.jpg" alt="Aerial: aéreo, tipo drone" loading="lazy"><i class="nr">17 · ALTURA E ÂNGULO</i></div><b>Aerial</b><span>aéreo, tipo drone</span></button>
+          <button type="button" class="shot bw" data-c="altura"><div class="im"><img src="img/s/shot-ground-level.jpg" alt="Ground-level: câmera no chão" loading="lazy"><i class="nr">18 · ALTURA E ÂNGULO</i></div><b>Ground-level</b><span>câmera no chão</span></button>
+          <button type="button" class="shot bw" data-c="altura"><div class="im"><img src="img/s/shot-worms-eye.jpg" alt="Worm's-eye view: visão de minhoca: do chão olhando bem pra cima" loading="lazy"><i class="nr">19 · ALTURA E ÂNGULO</i></div><b>Worm's-eye view</b><span>visão de minhoca: do chão olhando bem pra cima</span></button>
+          <button type="button" class="shot bw" data-c="altura"><div class="im"><img src="img/s/shot-low-angle-close-up.jpg" alt="Low-angle close-up: close de baixo pra cima" loading="lazy"><i class="nr">20 · ALTURA E ÂNGULO</i></div><b>Low-angle close-up</b><span>close de baixo pra cima</span></button>
+          <button type="button" class="shot bw" data-c="altura"><div class="im"><img src="img/s/shot-high-angle-close-up.jpg" alt="High-angle close-up: close de cima pra baixo" loading="lazy"><i class="nr">21 · ALTURA E ÂNGULO</i></div><b>High-angle close-up</b><span>close de cima pra baixo</span></button>
+          <button type="button" class="shot bw" data-c="lentes"><div class="im"><img src="img/s/shot-fisheye.jpg" alt="Fisheye: olho de peixe, imagem curvada" loading="lazy"><i class="nr">22 · LENTES E FOCO</i></div><b>Fisheye</b><span>olho de peixe, imagem curvada</span></button>
+          <button type="button" class="shot bw" data-c="lentes"><div class="im"><img src="img/s/shot-fisheye-close-up.jpg" alt="Fisheye close-up: close com olho de peixe" loading="lazy"><i class="nr">23 · LENTES E FOCO</i></div><b>Fisheye close-up</b><span>close com olho de peixe</span></button>
+          <button type="button" class="shot bw" data-c="lentes"><div class="im"><img src="img/s/shot-overhead-fisheye.jpg" alt="Overhead fisheye: olho de peixe de cima" loading="lazy"><i class="nr">24 · LENTES E FOCO</i></div><b>Overhead fisheye</b><span>olho de peixe de cima</span></button>
+          <button type="button" class="shot bw" data-c="lentes"><div class="im"><img src="img/s/shot-foreground-focus.jpg" alt="Foreground focus: foco no que está na frente, fundo desfocado" loading="lazy"><i class="nr">25 · LENTES E FOCO</i></div><b>Foreground focus</b><span>foco no que está na frente, fundo desfocado</span></button>
+          <button type="button" class="shot bw" data-c="lentes"><div class="im"><img src="img/s/shot-background-focus.jpg" alt="Background focus: foco no fundo, frente desfocada" loading="lazy"><i class="nr">26 · LENTES E FOCO</i></div><b>Background focus</b><span>foco no fundo, frente desfocada</span></button>
+          <button type="button" class="shot bw" data-c="lentes"><div class="im"><img src="img/s/shot-foreground-occlusion.jpg" alt="Foreground occlusion: algo na frente da lente cobrindo parte da imagem" loading="lazy"><i class="nr">27 · LENTES E FOCO</i></div><b>Foreground occlusion</b><span>algo na frente da lente cobrindo parte da imagem</span></button>
+          <button type="button" class="shot bw" data-c="luz"><div class="im"><img src="img/s/shot-silhouette.jpg" alt="Silhouette: silhueta: pessoa escura contra a luz" loading="lazy"><i class="nr">28 · LUZ E EFEITOS</i></div><b>Silhouette</b><span>silhueta: pessoa escura contra a luz</span></button>
+          <button type="button" class="shot bw" data-c="luz"><div class="im"><img src="img/s/shot-lens-flare.jpg" alt="Lens flare: reflexo de luz na lente" loading="lazy"><i class="nr">29 · LUZ E EFEITOS</i></div><b>Lens flare</b><span>reflexo de luz na lente</span></button>
+          <button type="button" class="shot bw" data-c="luz"><div class="im"><img src="img/s/shot-prism.jpg" alt="Prism reflection: prisma na frente da lente criando reflexos" loading="lazy"><i class="nr">30 · LUZ E EFEITOS</i></div><b>Prism reflection</b><span>prisma na frente da lente criando reflexos</span></button>
+          <button type="button" class="shot bw" data-c="criativos"><div class="im"><img src="img/s/shot-inside-a-hole.jpg" alt="Inside a hole: de dentro de um buraco, olhando pra cima" loading="lazy"><i class="nr">31 · CRIATIVOS</i></div><b>Inside a hole</b><span>de dentro de um buraco, olhando pra cima</span></button>
+          <button type="button" class="shot bw" data-c="criativos"><div class="im"><img src="img/s/shot-hoop-level.jpg" alt="Hoop-level: na altura de uma cesta de basquete" loading="lazy"><i class="nr">32 · CRIATIVOS</i></div><b>Hoop-level</b><span>na altura de uma cesta de basquete</span></button>
+          <button type="button" class="shot bw" data-c="criativos"><div class="im"><img src="img/s/shot-magnifying-glass.jpg" alt="Magnifying glass: através de uma lupa" loading="lazy"><i class="nr">33 · CRIATIVOS</i></div><b>Magnifying glass</b><span>através de uma lupa</span></button>
+          <button type="button" class="shot bw" data-c="criativos"><div class="im"><img src="img/s/shot-inside-the-fridge.jpg" alt="Inside-the-fridge: de dentro da geladeira, olhando pra pessoa" loading="lazy"><i class="nr">34 · CRIATIVOS</i></div><b>Inside-the-fridge</b><span>de dentro da geladeira, olhando pra pessoa</span></button>
+        </div>
+        <div class="shots-foot"><span>Imagens de exemplo geradas com IA no <b>Higgsfield (Nano Banana)</b>.</span><span>Toque numa imagem pra ampliar.</span></div>
+      </div>
+      <div class="quote-xl rv" style="padding-block:70px 20px">
+        <blockquote>Cada plano e cada ângulo <em>comunica</em> alguma coisa.</blockquote>
+        <cite>Escolha pela mensagem, não só pela estética.</cite>
+      </div>
+    </div>
+
+    <!-- PÓS -->
+    <div class="fase" id="pos">
+      <div class="fase-tit"><h3><span class="bl">P</span>ós</h3><p><span class="mono">PÓS-PRODUÇÃO</span>Do material bruto ao vídeo final.</p></div>
+      <div class="dark trilha" id="trilha" aria-hidden="true">
+        <div class="rg"><span>00:00</span><span>00:05</span><span>00:10</span><span>00:15</span><span>00:20</span><span>00:25</span><span>00:30</span></div>
+        <div class="tk t"><div style="flex:2">LEGENDA</div><div style="flex:3">TÍTULO VIRAL</div><div style="flex:1.4">CTA</div><div style="flex:3.6;opacity:0"></div></div>
+        <div class="tk v"><div style="flex:1.2">GANCHO</div><div style="flex:2">take_04</div><div style="flex:1">insert</div><div style="flex:2.4">CLÍMAX</div><div style="flex:1.2">b-roll</div><div style="flex:2.2">DESFECHO</div></div>
+        <div class="tk a"><div style="flex:10">trilha.wav</div></div>
+        <i class="ph" id="ph"></i>
+      </div>
+      <ol class="passos">
+        <li class="rv"><span class="pn">1</span><div class="txt">
+          <h4 class="h3">Log: guardar os arquivos</h4>
+          <p>O primeiro passo é o log: tirar os arquivos do cartão, organizar e guardar tudo. (Não confundir com o S-Log, que é o perfil de cor da câmera.)</p>
+          <p>É sempre importante guardar o material bruto. Pra isso eu recomendo o Google Drive, um SSD ou qualquer outra nuvem ou HD onde você consiga armazenar com segurança.</p>
+          <p class="call">Tenha sempre duas cópias do material (ex.: SSD + nuvem) antes de formatar o cartão.<small>Dica</small></p>
+        </div></li>
+        <li class="rv"><span class="pn">2</span><div class="txt">
+          <h4 class="h3">Decupagem: o pente fino</h4>
+          <p>Depois de guardar, vem a decupagem: assistir o material e selecionar os melhores arquivos e takes. É basicamente um pente fino que você vai dando no seu projeto, separando o que presta do que não vai entrar.</p>
+        </div></li>
+        <li class="rv"><span class="pn">3</span><div class="txt">
+          <h4 class="h3">Edição: DaVinci Resolve</h4>
+          <p>O editor que a gente usa é o DaVinci Resolve (tem versão gratuita). Um tutorial rápido do básico:</p>
+          <ol class="dv">
+            <li><i>01</i><div><b>Criar o projeto</b><p>Abra o DaVinci. Na tela do Project Manager, clique em New Project, dê um nome e clique em Create.</p></div></li>
+            <li><i>02</i><div><b>Importar os arquivos</b><p>Na aba Media (ou na Media Pool da aba Edit), arraste os arquivos do computador para dentro, ou use <kbd>Cmd/Ctrl + I</kbd>.</p></div></li>
+            <li><i>03</i><div><b>Criar a timeline</b><p>Vá em File → New Timeline (<kbd>Cmd/Ctrl + N</kbd>), ou simplesmente arraste o primeiro clipe da Media Pool para a área da timeline na aba Edit.</p></div></li>
+            <li><i>04</i><div><b>Colocar os clipes na timeline</b><p>Arraste os clipes da Media Pool para a timeline, na ordem que você quer.</p></div></li>
+            <li><i>05</i><div><b>Cortar</b><p>Posicione a agulha (playhead) no ponto do corte e aperte <kbd>Cmd/Ctrl + B</kbd>, ou use a ferramenta lâmina (<kbd>B</kbd>) e clique no clipe. Para apagar um pedaço e fechar o buraco: selecione e aperte <kbd>Shift + Delete</kbd>. Volte para a seta com <kbd>A</kbd>.</p></div></li>
+            <li><i>06</i><div><b>Ajustar o volume</b><p>Selecione o clipe e abra o Inspector (canto superior direito) → Audio → Volume. Ou arraste a linha horizontal que aparece em cima da faixa de áudio na timeline.</p></div></li>
+            <li><i>07</i><div><b>Exportar</b><p>Vá na aba Deliver, escolha o formato (ex.: H.264, MP4), clique em Add to Render Queue e depois em Render All.</p></div></li>
+          </ol>
+        </div></li>
+        <li class="rv"><span class="pn">4</span><div class="txt">
+          <h4 class="h3">Montagem: o corpo do vídeo</h4>
+          <p>A montagem é montar o corpo, o escopo do nosso vídeo. Como? Selecionando os melhores takes e encaixando eles no roteiro, no ritmo e na batida que a gente quer.</p>
+        </div></li>
+        <li class="rv"><span class="pn">5</span><div class="txt">
+          <h4 class="h3">Legendas e efeitos</h4>
+          <p><b>Legendas:</b> eu uso um pack de presets de animação para o DaVinci, os Títulos Virais.</p>
+          <div class="presets" id="presets">
+            <a class="pk novo" href="dl/titulos-virais-2.0.drfx" data-dl="titulos-virais-2.0.zip" data-direto="1" download="Titulos Virais 2.0.drfx"><span class="mono">.DRFX · 1,9 MB</span><b>Títulos Virais 2.0</b><span>A versão mais nova, a que eu uso hoje.</span><i class="bt">↓ Baixar</i></a>
+            <a class="pk" href="dl/titulos-virais-1.0.drfx" data-dl="titulos-virais-1.0.zip" data-direto="1" download="Titulos Virais 1.0.drfx"><span class="mono">.DRFX · 1 MB</span><b>Títulos Virais 1.0</b><span>A primeira versão do pack.</span><i class="bt">↓ Baixar</i></a>
+            <a class="pk" href="dl/titulos-virais-antigo.drfx" data-dl="titulos-virais-antigo.zip" data-direto="1" download="Titulos Virais antigo.drfx"><span class="mono">.DRFX · 2,8 MB</span><b>Títulos Virais antigo</b><span>O pack original, com as legendas clássicas.</span><i class="bt">↓ Baixar</i></a>
+          </div>
+          <p class="pk-como" id="pkComo"><b>Como instalar:</b> dê dois cliques no arquivo .drfx com o DaVinci Resolve aberto. Os títulos aparecem em Effects → Titles.</p>
+          <p class="pk-msg" id="pkMsg" role="status" hidden></p>
+          <p style="margin-top:20px"><b>Efeitos que eu mais uso:</b></p>
+          <div class="efeitos">
+            <div class="ef dark flash"><b>Flash Transition</b><p class="muted">Um flash de luz branca na troca entre dois clipes.</p></div>
+            <div class="ef dark inv"><b>Invert Transition</b><p class="muted">A mesma ideia do flash, só que com o efeito de inverter as cores no corte.</p></div>
+            <div class="ef dark"><b>Magic Mask</b><p class="muted">Recorta a pessoa automaticamente, o que permite colocar a legenda atrás dela.</p><small>DAVINCI RESOLVE STUDIO (PAGO)</small></div>
+            <div class="ef dark"><b>Match Cut</b><p class="muted">Corte que liga duas cenas por uma forma, movimento ou ação parecida.</p></div>
+          </div>
+          <p class="sub-h">Referências para estudar</p>
+          <div class="estudo">
+            <a href="https://motionarray.com/learn/davinci-resolve/camera-flash-shutter-effect-davinci-resolve/" target="_blank" rel="noopener">Flash: "How to Create Camera Flash &amp; Shutter Effects in DaVinci Resolve"<span>Motion Array ↗</span></a>
+            <a href="https://cutsio.com/blog/how-to-add-text-behind-objects-in-davinci-resolve" target="_blank" rel="noopener">Magic Mask / texto atrás da pessoa: "How to add text behind objects in DaVinci Resolve"<span>Cutsio ↗</span></a>
+            <a href="https://www.studiobinder.com/blog/what-is-a-match-cut-definition/" target="_blank" rel="noopener">Match Cut: "Match Cut"<span>StudioBinder ↗</span></a>
+          </div>
+        </div></li>
+        <li class="rv"><span class="pn">6</span><div class="txt">
+          <h4 class="h3">Edição de corte x edição de highlight</h4>
+          <p>Aqui na igreja a gente faz muito dois tipos de edição, e o criativo é meio que uma mescla dos dois:</p>
+          <div class="cxh">
+            <div><b class="t">Corte</b><span class="foco">Foco: a mensagem falada</span><p>Pega um trecho de uma fala (uma pregação, um testemunho) e transforma num vídeo curto. Gancho forte no começo, corte das pausas, legenda.</p><div class="mini" aria-hidden="true"><i class="k" style="flex:1.4"></i><i style="flex:3"></i><i style="flex:2.2"></i><i style="flex:2.6"></i></div></div>
+            <div><b class="t">Highlight</b><span class="foco">Foco: emoção e ritmo</span><p>O resumo de um evento com os melhores momentos. Imagens fortes, música e cortes na batida.</p><div class="mini" aria-hidden="true"><i style="flex:1"></i><i class="k" style="flex:.6"></i><i style="flex:1"></i><i style="flex:.6"></i><i style="flex:1"></i><i class="k" style="flex:.6"></i><i style="flex:1"></i><i style="flex:.6"></i><i style="flex:1"></i></div></div>
+          </div>
+        </div></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<div class="ticker" aria-hidden="true"><div class="tr">
+  <span>Claude <svg class="diamond"><use href="#dia"/></svg> Higgsfield <svg class="diamond"><use href="#dia"/></svg> Seedream <svg class="diamond"><use href="#dia"/></svg> Nano Banana <svg class="diamond"><use href="#dia"/></svg> Seedance <svg class="diamond"><use href="#dia"/></svg> Cada IA pra uma coisa <svg class="diamond"><use href="#dia"/></svg></span>
+  <span>Claude <svg class="diamond"><use href="#dia"/></svg> Higgsfield <svg class="diamond"><use href="#dia"/></svg> Seedream <svg class="diamond"><use href="#dia"/></svg> Nano Banana <svg class="diamond"><use href="#dia"/></svg> Seedance <svg class="diamond"><use href="#dia"/></svg> Cada IA pra uma coisa <svg class="diamond"><use href="#dia"/></svg></span>
+</div></div>
+
+<!-- ================= BLOCO 4 ================= -->
+<section class="bloco" id="ia" data-bloco>
+  <div class="wrap">
+    <div class="cab">
+      <span class="num-fundo" aria-hidden="true">04</span>
+      <span class="cab-orn" aria-hidden="true"><svg><use href="#dia"/></svg><svg class="ch"><use href="#chev"/></svg></span>
+      <div class="cab-top"><span class="eyebrow">Bloco 04</span><i class="ln"></i><span class="cnt">04 / 04</span></div>
+      <h2 class="h2">IA no<br><span class="bl">W</span>ork<span class="out">flow</span></h2>
+      <div class="cab-sub"><p>Como usar a inteligência artificial pra melhorar ainda mais o seu workflow.</p></div>
+    </div>
+    <p class="lead rv" style="margin:0 0 20px">Beleza: eu falei sobre captação e sobre edição de vídeo. Mas e a inteligência artificial? O que ela pode fazer pra te ajudar a melhorar ainda mais o seu workflow? Este bloco é uma demonstração disso.</p>
+    <p class="rv muted" style="margin:0 0 20px;max-width:60ch">As IAs que eu mais uso hoje são o Claude, o ChatGPT e o Higgsfield.</p>
+
+    <div class="sec">
+      <div class="l"><div class="stick"><span class="idx">IA · 01</span><h4 class="h3">LLMs: o que são</h4><p class="muted" style="margin:0">Large Language Model, ou modelo de linguagem grande.</p></div></div>
+      <div class="txt rv">
+        <p>A IA que eu mais uso são as LLMs. As mais famosas são o Claude e o ChatGPT.</p>
+        <p>Explicando de forma simples: uma LLM é uma IA que foi treinada lendo uma quantidade gigantesca de textos. Com isso, ela aprendeu a entender e a escrever como a gente. É o tipo de IA mais pessoal: você conversa com ela como conversaria com uma pessoa, e ela vai te ajudando. Vira o seu braço direito.</p>
+        <p>Um detalhe importante: ela não é um banco de dados que se atualiza sozinho todo dia. O conhecimento dela vai até a data em que foi treinada. Quando precisa de informação atual, ela pode pesquisar na internet, e é por isso que vale pedir pra ela buscar e mostrar as fontes.</p>
+        <p class="call">Uma LLM é como um assistente que leu quase tudo, e conversa com você.</p>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="l"><div class="stick"><span class="idx">IA · 02</span><h4 class="h3">Por que usar IA</h4><p class="muted" style="margin:0">Otimizar o seu tempo e agilizar o seu trabalho.</p></div></div>
+      <div class="txt rv">
+        <p>Pra mim, o principal ponto das IAs é otimizar o seu tempo e agilizar o seu trabalho. A IA ainda não pode te substituir, mas ela pode agilizar muito o que você faz. Se você não usa, você está ficando pra trás e perdendo tempo.</p>
+        <p class="call">A IA não te substitui. Mas quem usa IA vai andar mais rápido do que quem não usa.</p>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="l"><div class="stick"><span class="idx">IA · 03</span><h4 class="h3">Claude: a minha ferramenta principal</h4><p class="muted" style="margin:0">Inclusive o Claude Code.</p></div></div>
+      <div class="txt rv">
+        <p>Hoje a IA que eu mais uso, por preferência pessoal, é o Claude. Ele é uma ferramenta que consegue ser o seu braço direito no trabalho, em vários âmbitos. Pra mim, é a ferramenta com o melhor custo-benefício que existe, e eu uso todos os dias, em praticamente 100% do que eu faço, seja pra pesquisa, seja pra executar tarefas.</p>
+        <p>O ChatGPT eu uso só pra pesquisa e informações no geral.</p>
+        <p class="sub-h">Usando o Claude em todo o workflow</p>
+        <div class="usos">
+          <div><b>Pré-produção</b><span>Planejamento de conteúdo. Você manda alguns perfis de referência, usa a skill certa, e ele cria vários planejamentos de conteúdo pra você. Também ajuda com roteiro e busca de referências.</span></div>
+          <div><b>Organização</b><span>Mexer na sua agenda, organizar seus arquivos, planejar a rotina e até o financeiro.</span></div>
+          <div><b>Pós-produção</b><span>Ajuda na edição de vídeo.</span></div>
+          <div><b>Pesquisa</b><span>Buscar dados e informações.</span></div>
+        </div>
+
+        <p class="sub-h">Skills: "manuais" que ensinam o Claude a fazer uma tarefa do seu jeito</p>
+        <div class="cards">
+          <div class="card"><span class="ic" aria-hidden="true">✎</span><div><b>Roteiro</b><span>Gera roteiros a partir de uma ideia, na minha estrutura base.</span></div></div>
+          <div class="card"><span class="ic" aria-hidden="true">✂</span><div><b>Edição de vídeo</b><span>Pra galera editar junto com o Claude.</span><span class="st">EM DESENVOLVIMENTO</span></div></div>
+          <div class="card"><span class="ic" aria-hidden="true">★</span><div><b>Marketing</b><span>Planejamento de campanha, criação de conteúdo e revisão de marca.</span><span class="st">PLUGIN</span></div></div>
+        </div>
+
+        <p class="sub-h">Conexões: apps ligados ao Claude</p>
+        <div class="cards">
+          <div class="card"><span class="ic" aria-hidden="true">◎</span><div><b>vidIQ</b><span>Referências e vídeos em alta no Instagram, YouTube e TikTok.</span></div></div>
+          <div class="card"><span class="ic" aria-hidden="true">▦</span><div><b>Metricool</b><span>Métricas do meu perfil e agendamento de posts.</span></div></div>
+          <div class="card"><span class="ic" aria-hidden="true">✦</span><div><b>Higgsfield</b><span>Gera imagem, vídeo e áudio direto da conversa.</span></div></div>
+          <div class="card"><span class="ic" aria-hidden="true">♫</span><div><b>Artlist</b><span>Músicas, efeitos sonoros e geração com IA.</span></div></div>
+          <div class="card"><span class="ic" aria-hidden="true">◷</span><div><b>Google Agenda</b><span>Organiza a minha agenda e compromissos.</span></div></div>
+          <div class="card"><span class="ic" aria-hidden="true">☁</span><div><b>Google Drive</b><span>Acessa e organiza os meus arquivos.</span></div></div>
+          <div class="card"><span class="ic" aria-hidden="true">☑</span><div><b>ClickUp</b><span>As tarefas da equipe de mídia.</span></div></div>
+          <div class="card"><span class="ic" aria-hidden="true">▶</span><div><b>DaVinci Resolve</b><span>Integração pra editar junto com o Claude.</span></div></div>
+          <div class="card"><span class="ic" aria-hidden="true">➜</span><div><b>Navegador</b><span>O Claude navega em sites por mim.</span></div></div>
+        </div>
+        <p class="call">Este próprio material foi montado com o Claude: da organização dos blocos às 34 imagens dos planos, geradas no Higgsfield pela conversa.<small>Exemplo real</small></p>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="l"><div class="stick"><span class="idx">IA · 04</span><h4 class="h3">Geração de imagem e vídeo</h4><p class="muted" style="margin:0">Hubs de IA: várias IAs num lugar só.</p></div></div>
+      <div class="txt rv">
+        <p>O que é um hub de IA? É uma plataforma que reúne várias IAs num lugar só, pra você usar a melhor pra cada tarefa, sem precisar assinar cada uma separado.</p>
+        <p>O que eu uso é o <b>Higgsfield</b>. Com ele dá pra criar imagem, vídeo e áudio. E dá pra integrar ele com o Claude (via CLI ou MCP) e usar os dois juntos: foi assim que as imagens dos 34 shots deste material foram geradas.</p>
+
+        <p class="sub-h">Imagem: cada IA pra uma coisa</p>
+        <div class="modelos">
+          <div class="mod main"><span class="tag">PRINCIPAL</span><b>Seedream 5.0 Pro</b><span class="muted">Plates, lugares e paisagens.</span></div>
+          <div class="mod"><b>Nano Banana Pro</b><span class="muted">Pessoas, rostos e traços faciais.</span></div>
+          <div class="mod"><b>ChatGPT Image 2</b><span class="muted">Coisas mais simples.</span></div>
+        </div>
+
+        <p class="sub-h">Exemplo: Base Camp</p>
+        <p>Cenário inteiro criado com Seedream, imagem por imagem, do aéreo até o logo.</p>
+      </div>
+    </div>
+    <div class="film rv" aria-label="Imagens do cenário Base Camp">
+      <div class="rail">
+        <figure class="bw"><img src="img/basecamp-1.jpg" alt="Base Camp: vista aérea da floresta e do acampamento" loading="lazy"><figcaption>A001 · AÉREO</figcaption></figure>
+        <figure class="bw"><img src="img/basecamp-2.jpg" alt="Base Camp: cabana principal" loading="lazy"><figcaption>A002 · CABANA</figcaption></figure>
+        <figure class="bw"><img src="img/basecamp-3.jpg" alt="Base Camp: entrada da cabana" loading="lazy"><figcaption>A003 · ENTRADA</figcaption></figure>
+        <figure class="bw"><img src="img/basecamp-4.jpg" alt="Base Camp: interior com mural" loading="lazy"><figcaption>A004 · INTERIOR</figcaption></figure>
+        <figure class="bw"><img src="img/basecamp-logo.jpg" alt="Base Camp: logo no interior" loading="lazy"><figcaption>A005 · LOGO</figcaption></figure>
+      </div>
+    </div>
+    <p class="figcap wrap" style="padding:0">Imagens geradas no Higgsfield com Seedream 5.0 Pro. Arraste pro lado.</p>
+
+    <div class="sec" style="margin-top:40px">
+      <div class="l"><div class="stick"><span class="idx">IA · 04</span><h4 class="h3">Character sheet</h4><p class="muted" style="margin:0">Uma ficha de personagem com vários ângulos do mesmo rosto.</p></div></div>
+      <div class="txt rv">
+        <p>Serve de referência pra manter o personagem igual em todas as imagens e vídeos.</p>
+        <div class="ficha" role="img" aria-label="Os seis ângulos de um character sheet">
+          <div><svg viewBox="-40 -40 80 80" aria-hidden="true"><circle r="36" style="fill:none;stroke:var(--line-2)" stroke-dasharray="2 4"/><g transform="rotate(0)"><circle r="19" style="fill:var(--glass-2);stroke:var(--ink)" stroke-width="1.6"/><path d="M-6 17 L0 27 L6 17" style="fill:var(--gold);stroke:var(--gold-3)" stroke-width="1"/></g><rect x="-7" y="31" width="14" height="8" rx="1.5" style="fill:var(--ink)"/></svg><b>Frente</b><span>0°</span></div>
+          <div><svg viewBox="-40 -40 80 80" aria-hidden="true"><circle r="36" style="fill:none;stroke:var(--line-2)" stroke-dasharray="2 4"/><g transform="rotate(45)"><circle r="19" style="fill:var(--glass-2);stroke:var(--ink)" stroke-width="1.6"/><path d="M-6 17 L0 27 L6 17" style="fill:var(--gold);stroke:var(--gold-3)" stroke-width="1"/></g><rect x="-7" y="31" width="14" height="8" rx="1.5" style="fill:var(--ink)"/></svg><b>Três quartos</b><span>45°</span></div>
+          <div><svg viewBox="-40 -40 80 80" aria-hidden="true"><circle r="36" style="fill:none;stroke:var(--line-2)" stroke-dasharray="2 4"/><g transform="rotate(90)"><circle r="19" style="fill:var(--glass-2);stroke:var(--ink)" stroke-width="1.6"/><path d="M-6 17 L0 27 L6 17" style="fill:var(--gold);stroke:var(--gold-3)" stroke-width="1"/></g><rect x="-7" y="31" width="14" height="8" rx="1.5" style="fill:var(--ink)"/></svg><b>Perfil direito</b><span>90°</span></div>
+          <div><svg viewBox="-40 -40 80 80" aria-hidden="true"><circle r="36" style="fill:none;stroke:var(--line-2)" stroke-dasharray="2 4"/><g transform="rotate(-90)"><circle r="19" style="fill:var(--glass-2);stroke:var(--ink)" stroke-width="1.6"/><path d="M-6 17 L0 27 L6 17" style="fill:var(--gold);stroke:var(--gold-3)" stroke-width="1"/></g><rect x="-7" y="31" width="14" height="8" rx="1.5" style="fill:var(--ink)"/></svg><b>Perfil esquerdo</b><span>270°</span></div>
+          <div><svg viewBox="-40 -40 80 80" aria-hidden="true"><circle r="36" style="fill:none;stroke:var(--line-2)" stroke-dasharray="2 4"/><g transform="rotate(135)"><circle r="19" style="fill:var(--glass-2);stroke:var(--ink)" stroke-width="1.6"/><path d="M-6 17 L0 27 L6 17" style="fill:var(--gold);stroke:var(--gold-3)" stroke-width="1"/></g><rect x="-7" y="31" width="14" height="8" rx="1.5" style="fill:var(--ink)"/></svg><b>Costas de perfil</b><span>135°</span></div>
+          <div><svg viewBox="-40 -40 80 80" aria-hidden="true"><circle r="36" style="fill:none;stroke:var(--line-2)" stroke-dasharray="2 4"/><g transform="rotate(180)"><circle r="19" style="fill:var(--glass-2);stroke:var(--ink)" stroke-width="1.6"/><path d="M-6 17 L0 27 L6 17" style="fill:var(--gold);stroke:var(--gold-3)" stroke-width="1"/></g><rect x="-7" y="31" width="14" height="8" rx="1.5" style="fill:var(--ink)"/></svg><b>Costas</b><span>180°</span></div>
+        </div>
+        <p class="figcap">Os seis ângulos que eu uso na ficha, gerada no Higgsfield.</p>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="l"><div class="stick"><span class="idx">IA · 04</span><h4 class="h3">Vídeo: 100% Seedance</h4><p class="muted" style="margin:0">Hoje são as melhores pra vídeo.</p></div></div>
+      <div class="txt rv">
+        <div class="modelos v">
+          <div class="mod"><b>Seedance 2.0</b><span class="muted">Vídeo a partir de imagem e texto.</span></div>
+          <div class="mod main"><span class="tag">MAIS NOVA</span><b>Seedance 2.5</b><span class="muted">Aceita vídeo de referência pro movimento de câmera.</span></div>
+        </div>
+        <p style="margin-top:18px">Esse mercado está sempre se atualizando: acabou de sair o Kling 4.0, que eu ainda não cheguei a testar.</p>
+
+        <p class="sub-h">Exemplo 1: Base Camp (drone)</p>
+        <p>Um voo de drone contínuo de 12 segundos, feito com Seedance 2.5 a partir das imagens acima e de um rascunho 3D do movimento de câmera.</p>
+        <div class="frames">
+          <figure class="bw"><img src="img/drone-1.jpg" alt="Frame inicial do voo de drone" loading="lazy"><figcaption><span>INÍCIO</span><span>00:00</span></figcaption></figure>
+          <figure class="bw"><img src="img/drone-2.jpg" alt="Frame do meio do voo de drone" loading="lazy"><figcaption><span>MEIO</span><span>00:06</span></figcaption></figure>
+          <figure class="bw"><img src="img/drone-3.jpg" alt="Frame final do voo de drone" loading="lazy"><figcaption><span>FIM</span><span>00:12</span></figcaption></figure>
+          <div class="bar" aria-hidden="true"><i></i></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="l"><div class="stick"><span class="idx">IA · 04</span><h4 class="h3">Exemplo 2: vídeos criativos</h4><p class="muted" style="margin:0">Uns 4 segundos cada.</p></div></div>
+      <div class="txt rv">
+        <p>Aqui a IA entra pra fazer o que seria impossível (ou caríssimo) de gravar: trocar o cenário, transformar a pessoa em Lego, levar alguém pra neve em segundos. São vídeos curtos, perfeitos pra abrir um Reels, chamar um evento ou servir de transição.</p>
+      </div>
+    </div>
+    <div class="criativos rv">
+      <figure class="bw"><div class="im vf"><img src="img/criativo-1.jpg" alt="Fachada da igreja POIEMA à noite" loading="lazy"><i>~4s</i></div><figcaption><b>1. Fachada da igreja.</b> Do dia pra noite, com o letreiro acendendo.</figcaption></figure>
+      <figure class="bw"><div class="im vf"><img src="img/criativo-2.jpg" alt="Selfie com óculos de LED dentro da igreja" loading="lazy"><i>~4s</i></div><figcaption><b>2. Selfie futurista.</b> Câmera na mão, lente olho de peixe, óculos de LED dentro da igreja.</figcaption></figure>
+      <figure class="bw"><div class="im vf"><img src="img/criativo-3.jpg" alt="Selfie na neve" loading="lazy"><i>~4s</i></div><figcaption><b>3. Selfie na neve.</b> A mesma pegada da selfie, mas a pessoa é levada pra outro cenário.</figcaption></figure>
+      <figure class="bw"><div class="im vf"><img src="img/criativo-4.jpg" alt="Pregação no palco com tipografia gigante no telão" loading="lazy"><i>~4s</i></div><figcaption><b>4. Pregação no palco.</b> Cena de palco com a tipografia gigante do evento no telão.</figcaption></figure>
+      <figure class="bw"><div class="im vf"><img src="img/criativo-5.jpg" alt="Personagem em versão Lego segurando uma maçã" loading="lazy"><i>~4s</i></div><figcaption><b>5. Versão Lego.</b> O personagem transformado em Lego, num pomar todo feito de peças.</figcaption></figure>
+      <figure class="bw"><div class="im vf"><img src="img/criativo-6.jpg" alt="Personagem Lego caminhando no pomar de peças" loading="lazy"><i>~4s</i></div><figcaption><b>6. Versão Lego.</b> O mesmo pomar, outro plano.</figcaption></figure>
+    </div>
+
+    <div class="quote-xl rv">
+      <span class="mk" aria-hidden="true">“</span>
+      <blockquote>A IA não substitui a ideia. Ela tira a ideia <em>do papel</em>.</blockquote>
+      <cite>Vídeo criativo é isso</cite>
+    </div>
+  </div>
+</section>
+
+<div class="ticker frases" aria-label="Frases-chave do bloco 4"><div class="tr">
+  <span>"A IA não substitui o seu workflow, ela melhora ele." <svg class="diamond"><use href="#dia"/></svg> "O Claude é uma ferramenta universal no meu trabalho." <svg class="diamond"><use href="#dia"/></svg> "Cada IA pra uma coisa." <svg class="diamond"><use href="#dia"/></svg> "Esse mercado está sempre se atualizando." <svg class="diamond"><use href="#dia"/></svg></span>
+  <span aria-hidden="true">"A IA não substitui o seu workflow, ela melhora ele." <svg class="diamond"><use href="#dia"/></svg> "O Claude é uma ferramenta universal no meu trabalho." <svg class="diamond"><use href="#dia"/></svg> "Cada IA pra uma coisa." <svg class="diamond"><use href="#dia"/></svg> "Esse mercado está sempre se atualizando." <svg class="diamond"><use href="#dia"/></svg></span>
+</div></div>
+</main>
+
+<footer class="fim">
+  <span class="side l" aria-hidden="true"><span class="mono-lab">LA<b>B</b>.<i>SP</i></span></span>
+  <span class="side r" aria-hidden="true"><svg><use href="#chev"/></svg></span>
+  <div class="wrap">
+    <svg class="orn-top" aria-hidden="true"><use href="#dia"/></svg>
+    <p class="big"><span><span class="bl">L</span>ab</span><span><span class="bl">S</span>tudio</span></p>
+    <div class="by" style="margin-top:14px"><i>by</i><b>Rotband</b></div>
+  </div>
+  <div class="cena" aria-hidden="true">
+    <img class="cidade" src="img/cidade.jpg" alt="" loading="lazy">
+    <img class="lentes2" src="img/lentes-ouro.webp" alt="" loading="lazy">
+  </div>
+  <div class="fim-row"><div class="wrap" style="display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;width:100%">
+    <a class="logo" href="#inicio" aria-label="LAB SP"><span class="la">LA</span><span class="b">B</span><span class="sp">SP</span></a>
+    <span class="eyebrow">Workshop Lab Studio</span>
+    <button type="button" class="topo" id="topo">↑ Voltar ao topo</button>
+  </div></div>
+</footer>
+
+<dialog class="lb" id="lb" aria-label="Plano ampliado">
+  <figure><img id="lbImg" src="" alt=""><figcaption><b id="lbT"></b><span id="lbD"></span></figcaption></figure>
+  <div class="ctrl"><button type="button" id="lbPrev">← Anterior</button><button type="button" id="lbNext">Próximo →</button><button type="button" id="lbClose">Fechar</button></div>
+</dialog>
+
+<script>
+(function(){
+  var reduz = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var nav = document.getElementById('nav'), prog = document.getElementById('prog'), tc = document.getElementById('tc');
+  var lentes = document.getElementById('lentes'), verso = document.getElementById('verso'), ph = document.getElementById('ph'), trilha = document.getElementById('trilha');
+  var links = [].slice.call(document.querySelectorAll('.nav a.lk'));
+  var secs = links.map(function(a){return document.querySelector(a.getAttribute('href'))});
+  function pad(n){return (n<10?'0':'')+n}
+  function onScroll(){
+    var y = window.scrollY, h = document.documentElement.scrollHeight - innerHeight, p = h>0 ? y/h : 0;
+    prog.style.transform = 'scaleX(' + p + ')';
+    var f = Math.round(p*20*60*24), s = Math.floor(f/24);
+    tc.textContent = '00:' + pad(Math.floor(s/60)) + ':' + pad(s%60) + ':' + pad(f%24);
+    var cur = 0;
+    secs.forEach(function(s,i){ if(s && s.getBoundingClientRect().top < innerHeight*0.35) cur = i; });
+    links.forEach(function(a,i){ a.classList.toggle('on', i===cur); });
+    if(!reduz){
+      if(lentes && y < innerHeight*1.5) lentes.style.transform = 'translate3d(0,' + (y*-0.06) + 'px,0) scale(' + (1 + y*0.00012) + ')';
+      if(verso){
+        var r = verso.getBoundingClientRect(), c = r.top + r.height/2 - innerHeight/2;
+        var b = Math.min(7, Math.abs(c)/innerHeight*16);
+        verso.style.setProperty('--blur', b.toFixed(2)+'px');
+      }
+      if(trilha){
+        var t = trilha.getBoundingClientRect(), q = 1 - (t.top + t.height)/(innerHeight + t.height);
+        ph.style.setProperty('--ph', (Math.max(0,Math.min(1,q))*96+2).toFixed(1)+'%');
+      }
+    }
+  }
+  addEventListener('scroll', onScroll, {passive:true}); addEventListener('resize', onScroll); onScroll();
+
+  // links ativos no mobile: mantém o botão ativo visível
+  var ul = document.querySelector('.nav ul');
+  new MutationObserver(function(){ var on = ul.querySelector('.on'); if(on && ul.scrollWidth > ul.clientWidth){ ul.scrollTo({left: on.offsetLeft - 16, behavior: reduz?'auto':'smooth'}); } }).observe(ul, {subtree:true, attributes:true, attributeFilter:['class']});
+
+  // revelação: só esconde o que ainda está abaixo da dobra
+  if('IntersectionObserver' in window && !reduz){
+    var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.remove('oc'); io.unobserve(e.target); } }); }, {rootMargin:'0px 0px -8% 0px'});
+    document.querySelectorAll('.rv').forEach(function(el){ if(el.getBoundingClientRect().top > innerHeight){ el.classList.add('oc'); io.observe(el); } });
+    // imagens P&B ganham cor quando passam pelo centro da tela
+    var io2 = new IntersectionObserver(function(es){ es.forEach(function(e){ e.target.classList.toggle('cor', e.isIntersecting); }); }, {rootMargin:'-38% 0px -38% 0px'});
+    document.querySelectorAll('.bw:not(.cor)').forEach(function(el){ io2.observe(el); });
+  }
+
+  // abertura (f)
+  var F = [1.4,1.8,2,2.8,4,5.6,8,11,16];
+  var DESC = {1.4:'Bem aberta: muita luz e fundo muito desfocado.',1.8:'Lente clara: ótima em pouca luz, fundo bem desfocado.',2:'Aberta: retrato com o fundo suave.',2.8:'Equilíbrio: ainda separa o assunto do fundo.',4:'Meio termo: mais do rosto e do ambiente em foco.',5.6:'Mais fechada: grupos de pessoas e eventos.',8:'Fechada: quase tudo em foco, precisa de mais luz.',11:'Bem fechada: paisagem nítida de ponta a ponta.',16:'Mínima: pouquíssima luz, tudo em foco.'};
+  var sl = document.getElementById('fslider'), fnum = document.getElementById('fnum'), ab = document.getElementById('abert'), lam = document.getElementById('laminas'), pv = document.querySelector('.iris .pv'), fhud = document.getElementById('fhud'), fdesc = document.getElementById('fdesc');
+  var mL = document.getElementById('mLuz'), mD = document.getElementById('mDes'), mF = document.getElementById('mFoc');
+  function iris(){
+    var f = F[+sl.value], r = Math.max(4, 46*1.4/f), pts = [], ls = '';
+    for(var i=0;i<6;i++){ var a = Math.PI/3*i + Math.PI/6; pts.push((r*Math.cos(a)).toFixed(1)+','+(r*Math.sin(a)).toFixed(1)); }
+    ab.setAttribute('points', pts.join(' '));
+    for(var j=0;j<6;j++){ var a1 = Math.PI/3*j + Math.PI/6, a2 = a1 + Math.PI/3; ls += '<path d="M'+(r*Math.cos(a1)).toFixed(1)+' '+(r*Math.sin(a1)).toFixed(1)+' L'+(48*Math.cos(a1+0.6)).toFixed(1)+' '+(48*Math.sin(a1+0.6)).toFixed(1)+'"/>'; }
+    lam.innerHTML = ls;
+    var t = f===Math.round(f) ? f : f.toFixed(1); fnum.textContent = t;
+    var luz = Math.pow(1.4/f,2), k = (+sl.value)/8;
+    mL.style.setProperty('--v', Math.max(3, luz*100).toFixed(0)+'%');
+    mD.style.setProperty('--v', ((1-k)*92+6).toFixed(0)+'%');
+    mF.style.setProperty('--v', (k*90+8).toFixed(0)+'%');
+    pv.style.setProperty('--bk', ((1-k)*7).toFixed(1)+'px');
+    var iso = Math.round(400*Math.pow(f/1.8,2)/100)*100; iso = Math.max(100, Math.min(12800, iso));
+    fhud.textContent = 'f/' + t + ' · 1/50 · ISO ' + iso;
+    fdesc.textContent = DESC[f];
+  }
+  sl.addEventListener('input', iris); iris();
+
+  // distância focal
+  var fimg = document.getElementById('fimg'), fmm = document.getElementById('fmm');
+  document.querySelectorAll('.focal button').forEach(function(b){ b.addEventListener('click', function(){
+    document.querySelectorAll('.focal button').forEach(function(x){ x.setAttribute('aria-pressed', x===b); });
+    fimg.style.transform = 'scale(' + b.dataset.z + ')'; fmm.textContent = b.dataset.mm;
+  }); });
+
+  // fps → obturador
+  document.querySelectorAll('.lcd .fps button').forEach(function(b){ b.addEventListener('click', function(){
+    document.querySelectorAll('.lcd .fps button').forEach(function(x){ x.setAttribute('aria-pressed', x===b); });
+    document.getElementById('lcdFps').textContent = b.dataset.fps; document.getElementById('lcdSh').textContent = b.dataset.sh;
+  }); });
+
+  // grade dos terços
+  var gb = document.getElementById('gradeBtn');
+  gb.addEventListener('click', function(){ var on = gb.getAttribute('aria-pressed') !== 'true'; gb.setAttribute('aria-pressed', on); document.getElementById('tercos').classList.toggle('grade-on', on); gb.textContent = on ? '▦ Esconder a grade' : '▦ Mostrar a grade'; });
+
+  // filtros dos 34 shots
+  var shots = [].slice.call(document.querySelectorAll('.shot'));
+  document.querySelectorAll('.filtros button').forEach(function(b){ b.addEventListener('click', function(){
+    document.querySelectorAll('.filtros button').forEach(function(x){ x.setAttribute('aria-pressed', x===b); });
+    shots.forEach(function(s){ s.hidden = !(b.dataset.f==='todos' || s.dataset.c===b.dataset.f); });
+  }); });
+
+  // lightbox
+  var lb = document.getElementById('lb'), li = document.getElementById('lbImg'), lt = document.getElementById('lbT'), ld = document.getElementById('lbD'), idx = 0;
+  function vis(){ return shots.filter(function(s){ return !s.hidden; }); }
+  function abre(i){ var v = vis(); idx = (i+v.length)%v.length; var s = v[idx];
+    li.src = s.querySelector('img').src; li.alt = s.querySelector('img').alt; lt.textContent = s.querySelector('b').textContent; ld.textContent = s.querySelector('span').textContent + ' · ' + s.querySelector('.nr').textContent;
+    if(!lb.open){ try{ lb.showModal(); }catch(e){ lb.setAttribute('open',''); } } }
+  shots.forEach(function(s){ s.addEventListener('click', function(){ abre(vis().indexOf(s)); }); });
+  document.getElementById('lbPrev').onclick = function(){ abre(idx-1); };
+  document.getElementById('lbNext').onclick = function(){ abre(idx+1); };
+  document.getElementById('lbClose').onclick = function(){ lb.close ? lb.close() : lb.removeAttribute('open'); };
+  lb.addEventListener('click', function(e){ if(e.target===lb) lb.close(); });
+  lb.addEventListener('keydown', function(e){ if(e.key==='ArrowRight') abre(idx+1); if(e.key==='ArrowLeft') abre(idx-1); });
+
+  // downloads dos Títulos Virais: no site publicado vão pelo pedido de salvar do Claude; no arquivo único o link baixa direto
+  var dlP = null, pkMsg = document.getElementById('pkMsg');
+  function msg(t){ pkMsg.textContent = t; pkMsg.hidden = !t; }
+  document.querySelectorAll('.pk[data-dl]').forEach(function(a){ a.addEventListener('click', function(ev){
+    if(a.getAttribute('href').indexOf('data:') === 0 || a.dataset.direto) return;
+    ev.preventDefault(); msg('');
+    if(!window.claude || !window.claude.use){ msg('Abra este site pelo link do Claude pra baixar.'); return; }
+    dlP = dlP || window.claude.use('downloads');
+    dlP.then(function(dl){
+      if(!dl){ msg('O download não está disponível nesta visualização.'); return; }
+      return fetch(a.getAttribute('href')).then(function(r){ if(!r.ok) throw 0; return r.blob(); })
+        .then(function(b){ return dl.save({filename: a.dataset.dl, data: b}); })
+        .then(function(){ msg('Baixado. Descompacte o .zip e dê dois cliques no arquivo .drfx.'); })
+        .catch(function(e){ if(e && e.code === 'declined') return; msg('Não deu pra baixar agora. Tente de novo em instantes.'); });
+    });
+  }); });
+
+  document.getElementById('topo').addEventListener('click', function(){ scrollTo({top:0, behavior: reduz?'auto':'smooth'}); });
+})();
+</script>
+
+</body>
+</html>
