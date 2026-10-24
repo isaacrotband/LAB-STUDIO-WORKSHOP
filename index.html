@@ -622,6 +622,8 @@ kbd{font-family:var(--f-mono);font-size:.74rem;padding:2px 6px;border-radius:4px
 .film figure img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:2px}
 .film figcaption{position:absolute;left:10px;bottom:8px;font-family:var(--f-mono);font-size:.66rem;color:#fff;text-shadow:0 1px 5px rgba(0,0,0,.8)}
 .figcap{font-size:.8rem;color:var(--ink-2);margin-top:10px}
+.sheet{margin:18px 0 0;border-radius:6px;overflow:hidden;border:1px solid var(--line)}
+.sheet img{width:100%}
 .ficha{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:18px}
 .ficha div{position:relative;padding:18px 14px 14px;border:1px solid var(--line);border-radius:6px;background:var(--glass);text-align:center;min-width:0}
 .ficha svg{width:74px;height:74px;display:block;margin:0 auto 10px}
@@ -1430,15 +1432,8 @@ kbd{font-family:var(--f-mono);font-size:.74rem;padding:2px 6px;border-radius:4px
       <div class="l"><div class="stick"><span class="idx">IA · 04</span><h4 class="h3">Character sheet</h4><p class="muted" style="margin:0">Uma ficha de personagem com vários ângulos do mesmo rosto.</p></div></div>
       <div class="txt rv">
         <p>Serve de referência pra manter o personagem igual em todas as imagens e vídeos.</p>
-        <div class="ficha" role="img" aria-label="Os seis ângulos de um character sheet">
-          <div><svg viewBox="-40 -40 80 80" aria-hidden="true"><circle r="36" style="fill:none;stroke:var(--line-2)" stroke-dasharray="2 4"/><g transform="rotate(0)"><circle r="19" style="fill:var(--glass-2);stroke:var(--ink)" stroke-width="1.6"/><path d="M-6 17 L0 27 L6 17" style="fill:var(--gold);stroke:var(--gold-3)" stroke-width="1"/></g><rect x="-7" y="31" width="14" height="8" rx="1.5" style="fill:var(--ink)"/></svg><b>Frente</b><span>0°</span></div>
-          <div><svg viewBox="-40 -40 80 80" aria-hidden="true"><circle r="36" style="fill:none;stroke:var(--line-2)" stroke-dasharray="2 4"/><g transform="rotate(45)"><circle r="19" style="fill:var(--glass-2);stroke:var(--ink)" stroke-width="1.6"/><path d="M-6 17 L0 27 L6 17" style="fill:var(--gold);stroke:var(--gold-3)" stroke-width="1"/></g><rect x="-7" y="31" width="14" height="8" rx="1.5" style="fill:var(--ink)"/></svg><b>Três quartos</b><span>45°</span></div>
-          <div><svg viewBox="-40 -40 80 80" aria-hidden="true"><circle r="36" style="fill:none;stroke:var(--line-2)" stroke-dasharray="2 4"/><g transform="rotate(90)"><circle r="19" style="fill:var(--glass-2);stroke:var(--ink)" stroke-width="1.6"/><path d="M-6 17 L0 27 L6 17" style="fill:var(--gold);stroke:var(--gold-3)" stroke-width="1"/></g><rect x="-7" y="31" width="14" height="8" rx="1.5" style="fill:var(--ink)"/></svg><b>Perfil direito</b><span>90°</span></div>
-          <div><svg viewBox="-40 -40 80 80" aria-hidden="true"><circle r="36" style="fill:none;stroke:var(--line-2)" stroke-dasharray="2 4"/><g transform="rotate(-90)"><circle r="19" style="fill:var(--glass-2);stroke:var(--ink)" stroke-width="1.6"/><path d="M-6 17 L0 27 L6 17" style="fill:var(--gold);stroke:var(--gold-3)" stroke-width="1"/></g><rect x="-7" y="31" width="14" height="8" rx="1.5" style="fill:var(--ink)"/></svg><b>Perfil esquerdo</b><span>270°</span></div>
-          <div><svg viewBox="-40 -40 80 80" aria-hidden="true"><circle r="36" style="fill:none;stroke:var(--line-2)" stroke-dasharray="2 4"/><g transform="rotate(135)"><circle r="19" style="fill:var(--glass-2);stroke:var(--ink)" stroke-width="1.6"/><path d="M-6 17 L0 27 L6 17" style="fill:var(--gold);stroke:var(--gold-3)" stroke-width="1"/></g><rect x="-7" y="31" width="14" height="8" rx="1.5" style="fill:var(--ink)"/></svg><b>Costas de perfil</b><span>135°</span></div>
-          <div><svg viewBox="-40 -40 80 80" aria-hidden="true"><circle r="36" style="fill:none;stroke:var(--line-2)" stroke-dasharray="2 4"/><g transform="rotate(180)"><circle r="19" style="fill:var(--glass-2);stroke:var(--ink)" stroke-width="1.6"/><path d="M-6 17 L0 27 L6 17" style="fill:var(--gold);stroke:var(--gold-3)" stroke-width="1"/></g><rect x="-7" y="31" width="14" height="8" rx="1.5" style="fill:var(--ink)"/></svg><b>Costas</b><span>180°</span></div>
-        </div>
-        <p class="figcap">Os seis ângulos que eu uso na ficha, gerada no Higgsfield.</p>
+        <figure class="sheet vf"><img src="img/character-sheet.jpg" alt="Character sheet com seis ângulos do mesmo rosto: frente, perfis, três quartos e costas" loading="lazy"></figure>
+        <p class="figcap">Character sheet gerado no Higgsfield.</p>
       </div>
     </div>
 
